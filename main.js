@@ -67,7 +67,7 @@ function runArchitect() {
             Memory.lastBuildTime = Game.time;
         }
 
-        console.log(`${Game.time} ${Memory.lastBuildTime}`);
+        // console.log(`${Game.time} ${Memory.lastBuildTime}`);
 
         if (Game.time >= (Memory.lastBuildTime + 100)) {
             Memory.lastBuildTime = Game.time;
