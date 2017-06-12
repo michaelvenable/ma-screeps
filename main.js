@@ -14,7 +14,7 @@ let visuals = require('constants').visuals;
 let roleSpawner = require('role.spawner');
 
 module.exports.loop = function () {
-    console.log("========================================== (hello from github)");
+    console.log("==========================================");
 
     for (let spawnName in Game.spawns) {
         let spawn = Game.spawns[spawnName];
