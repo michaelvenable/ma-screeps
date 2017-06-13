@@ -100,7 +100,7 @@ let Architect = function (room) {
 
     let asArray = true;
     let structures = room.lookForAtArea(LOOK_STRUCTURES, boundingBox.top, boundingBox.left, boundingBox.bottom, boundingBox.right, asArray);
-    if (structures.filter(s => s.structureType === STRUCTURE_TOWER)) {
+    if (structures.filter(s => s.structureType === STRUCTURE_TOWER).length > 0) {
       return true;
     }
 
