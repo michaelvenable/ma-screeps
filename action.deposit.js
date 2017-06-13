@@ -5,14 +5,14 @@ function run(creep) {
         creep.memory.job = undefined;
         return;
     }
-    
+
     if (creep.carry.energy === creep.carryCapacity && creep.memory.action === 'harvesting') {
         creep.memory.action = 'delivering';
     }
     if (creep.memory.action === undefined) {
         creep.memory.action = 'harvesting';
     }
-    
+
     if (creep.memory.action === 'harvesting') {
         let sources = creep.room.find(FIND_SOURCES);
         if (sources.length > 0) {
@@ -20,7 +20,7 @@ function run(creep) {
             if (creep.memory.harvestTarget !== undefined) {
                  target = Game.getObjectById(creep.memory.harvestTarget);
             } else {
-                target = sources[Math.floor(Math.random() * (sources.length - 1))];
+                target = sources[Math.floor(Math.random() * sources.length)];
             }
             creep.memory.harvestTarget = target.id;
             let result = creep.harvest(target);
@@ -38,7 +38,7 @@ function run(creep) {
         } else {
             creep.memory.harvestTarget = undefined;
             let target = Game.getObjectById(creep.memory.job.target);
-            
+
             if (target === null || target.energy === target.energyCapacity) {
                 console.log(`${creep} gives up, because the deposit target is full.`);
                 creep.memory.action = undefined;

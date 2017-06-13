@@ -18,7 +18,7 @@ function run(creep) {
             if (creep.memory.harvestTarget !== undefined) {
                  target = Game.getObjectById(creep.memory.harvestTarget);
             } else {
-                target = sources[Math.floor(Math.random() * (sources.length - 1))];
+                target = sources[Math.floor(Math.random() * sources.length)];
             }
             creep.memory.harvestTarget = target.id;
             let result = creep.harvest(target);
