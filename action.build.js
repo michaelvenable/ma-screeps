@@ -10,7 +10,7 @@ function run(creep) {
     if (creep.memory.action === undefined) {
         creep.memory.action = 'harvesting';
     }
-    
+
     if (creep.memory.action === 'harvesting') {
         let sources = creep.room.find(FIND_SOURCES);
         if (sources.length > 0) {
