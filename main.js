@@ -4,7 +4,7 @@ let deliveringAction = require('action.delivering');
 let patrolAction = require('action.patrol');
 
 let Architect = require('class.architect');
-let Boss = require('helper.boss').Boss;
+let CityPlanner = require('helper.cityPlanner');
 let Commander = require('helper.commander');
 
 let actions = require('constants').actions;
@@ -77,11 +77,11 @@ function runArchitect() {
 }
 
 function assignJobs() {
-    let boss = new Boss();
+    let cityPlanner = new CityPlanner();
 
     for (let roomName in Game.rooms) {
         let room = Game.rooms[roomName];
-        boss.assignJobs(room);
+        cityPlanner.assignJobs(room);
     }
 }
 
