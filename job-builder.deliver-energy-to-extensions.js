@@ -56,7 +56,7 @@ function DeliverEnergyToExtensions(room) {
   function assignJobToCreep(job, creep) {
     creep.memory.job = job;
     creep.memory.action = undefined;
-    console.log(`${creep} is tasked with ${newJob.action} to ${newJob.target}`);
+    console.log(`${creep} is tasked with ${job.action} to ${job.target}`);
   }
 }
 
