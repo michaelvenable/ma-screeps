@@ -12,12 +12,12 @@ function DeliverEnergyToExtensions(room) {
 
         // Calculate how much energy is remaining after the creeps assigned to the spawn have completed their job.
         peasants
-          .filter(c => c.memory.job !== undefined && c.memory.job.action === 'deposit' && c.memory.job.target === s.id)
-          .forEach(c => {
-            if (c.carry.energy > 0) {
-              remainingEnergy -= c.carry.energy;
+          .filter(creep => creep.memory.job !== undefined && creep.memory.job.action === 'deposit' && creep.memory.job.target === s.id)
+          .forEach(creep => {
+            if (creep.carry.energy > 0) {
+              remainingEnergy -= creep.carry.energy;
             } else {
-              remainingEnergy -= c.carry.energyCapacity;
+              remainingEnergy -= creep.carry.energyCapacity;
             }
           });
 
@@ -56,7 +56,7 @@ function DeliverEnergyToExtensions(room) {
   function assignJobToCreep(job, creep) {
     creep.memory.job = job;
     creep.memory.action = undefined;
-    console.log(`${c} is tasked with ${newJob.action} to ${newJob.target}`);
+    console.log(`${creep} is tasked with ${newJob.action} to ${newJob.target}`);
   }
 }
 

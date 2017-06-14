@@ -38,7 +38,7 @@ function DeliverEnergyToConstructionSites(room) {
           .forEach(creep => {
             if (remainingProgress > 0) {
               assignJobToCreep(job, creep);
-              remainingProgress -= c.carry.energyCapacity;
+              remainingProgress -= creep.carry.energyCapacity;
             }
           });
       });
@@ -46,7 +46,7 @@ function DeliverEnergyToConstructionSites(room) {
 
   function assignJobToCreep(job, creep, reason) {
     creep.memory.job = job;
-    c.memory.action = undefined;
+    creep.memory.action = undefined;
 
     if (reason === undefined) {
       console.log(`${creep} is tasked with ${newJob.action} to ${newJob.target} (spawn)`);

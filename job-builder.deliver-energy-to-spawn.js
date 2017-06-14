@@ -17,9 +17,9 @@ function DeliverEnergyToSpawn(room) {
           .filter(creep => creep.memory.job.target === spawn.id)
           .forEach(creep => {
             if (creep.carry.energy > 0) {
-              remainingEnergy -= c.carry.energy;
+              remainingEnergy -= creep.carry.energy;
             } else {
-              remainingEnergy -= c.carry.energyCapacity;
+              remainingEnergy -= creep.carry.energyCapacity;
             }
           });
 
@@ -27,11 +27,11 @@ function DeliverEnergyToSpawn(room) {
 
         // Most suitable - a creep with energy and no job.
         peasants
-          .filter(c => c.carry.energy !== 0 && c.memory.job === undefined)
+          .filter(creep => creep.carry.energy !== 0 && creep.memory.job === undefined)
           .forEach(creep => {
             if (remainingEnergy > 0) {
               assignJobToCreep(job, creep, 'he has energy and no job');
-              remainingEnergy -= c.carry.energy;
+              remainingEnergy -= creep.carry.energy;
             }
           });
 
@@ -41,7 +41,7 @@ function DeliverEnergyToSpawn(room) {
           .forEach(creep => {
             if (remainingEnergy > 0) {
               assignJobToCreep(job, creep, 'he has spare energy');
-              remainingEnergy -= c.carry.energy;
+              remainingEnergy -= creep.carry.energy;
             }
           });
 
@@ -51,7 +51,7 @@ function DeliverEnergyToSpawn(room) {
           .forEach(creep => {
             if (remainingEnergy > 0) {
               assignJobToCreep(job, creep, 'because he has no job');
-              remainingEnergy -= c.carry.energyCapacity;
+              remainingEnergy -= creep.carry.energyCapacity;
             }
           });
       });
@@ -59,6 +59,7 @@ function DeliverEnergyToSpawn(room) {
 
   function assignJobToCreep(job, creep, reason) {
     creep.memory.job = job;
+    creep.memory.action = undefined;
 
     if (reason === undefined) {
       console.log(`${creep} is tasked with ${newJob.action} to ${newJob.target} (spawn)`);

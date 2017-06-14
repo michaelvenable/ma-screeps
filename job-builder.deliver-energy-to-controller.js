@@ -21,7 +21,7 @@ function DeliverEnergyToController(room) {
 
   function assignJobToCreep(job, creep) {
     creep.memory.job = job;
-    c.memory.action = undefined;
+    creep.memory.action = undefined;
     console.log(`${creep} is tasked with ${newJob.action} to ${newJob.target} (controller).`);
   }
 }
