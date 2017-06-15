@@ -4,7 +4,7 @@ function DeliverEnergyToController(room) {
     target: room.controller.id
   };
 
-  this.assignJobs = function (peasants, ongoingJobs) {
+  this.assignJobs = function (peasants) {
     // If there is more than one creep, then always have at least one creep upgrading the controller.
     if (peasants.length < 2) {
       return;

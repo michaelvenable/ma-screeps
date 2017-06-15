@@ -3,6 +3,7 @@ let DeliverEnergyToSpawn = require('task-launcher.deliver-energy-to-spawn');
 let DeliverEnergyToExtensions = require('task-launcher.deliver-energy-to-extensions');
 let DeliverEnergyToConstructionSites = require('task-launcher.deliver-energy-to-construction-sites');
 let AssignWaitingPeasantsToUpgradeController = require('task-launcher.assign-waiting-peasants-to-upgrade-controller');
+let DeliverEnergyToTowers = require('task-launcher.deliver-energy-to-towers');
 
 let CityPlanner = function () {
 
@@ -12,13 +13,12 @@ let CityPlanner = function () {
       new DeliverEnergyToSpawn(room),
       new DeliverEnergyToExtensions(room),
       new DeliverEnergyToConstructionSites(room),
-      new AssignWaitingPeasantsToUpgradeController(room)
+      new DeliverEnergyToTowers(room),
+      new AssignWaitingPeasantsToUpgradeController(room),
     ];
 
     let peasants = room.find(FIND_MY_CREEPS).filter(creep => creep.memory.role === 'peasant');
-    let ongoingJobs = new JobList(room);
-
-    taskLaunchers.forEach(builder => builder.assignJobs(peasants, ongoingJobs));
+    taskLaunchers.forEach(builder => builder.assignJobs(peasants));
   };
 };
 

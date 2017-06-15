@@ -12,7 +12,7 @@ function DeliverEnergyToSpawn(room) {
 
         // Calculate how much energy is remaining after the creeps assigned to the spawn have completed their job.
         peasants
-          .filter(creep => creep.memory.jobs !== undefined)
+          .filter(creep => creep.memory.job !== undefined)
           .filter(creep => creep.memory.job.action === 'deposit')
           .filter(creep => creep.memory.job.target === spawn.id)
           .forEach(creep => {
@@ -37,7 +37,8 @@ function DeliverEnergyToSpawn(room) {
 
         // Next, we will re-assign any creeps who have a job and have some energy.
         peasants
-          .filter(creep => creep.carry.energy >= 10 && creep.memory.job.action !== 'deposit' && creep.memory.job.target !== spawn.id)
+          .filter(creep => creep.carry.energy >= 10)
+          .filter(creep => creep.memory.job !== undefined && creep.memory.job.action !== 'deposit' && creep.memory.job.target !== spawn.id)
           .forEach(creep => {
             if (remainingEnergy > 0) {
               assignJobToCreep(job, creep, 'he has spare energy');

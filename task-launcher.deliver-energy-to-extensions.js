@@ -33,7 +33,7 @@ function DeliverEnergyToExtensions(room) {
 
           // Next, we will re-assign any creeps who have a job and have some energy.
           peasants
-            .filter(creep => creep.carry.energy > 0 && creep.memory.job.action !== 'deposit')
+            .filter(creep => creep.carry.energy > 0 && creep.memory.job !== undefined && creep.memory.job.action !== 'deposit')
             .forEach(creep => {
               if (remainingEnergy > 0) {
                 assignJobToCreep(job, creep)
@@ -47,7 +47,7 @@ function DeliverEnergyToExtensions(room) {
               .forEach(creep => {
                 if (remainingEnergy > 0) {
                   assignJobToCreep(job, creep);
-                  remainingEnergy -= c.carry.energyCapacity;
+                  remainingEnergy -= creep.carry.energyCapacity;
                 }
               });
       });
