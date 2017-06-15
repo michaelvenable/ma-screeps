@@ -10,10 +10,10 @@ function DeliverEnergyToController(room) {
       return;
     }
 
-    let numCreepsUpgradingTower = peasants.filter(creep => creep.memory.job !== undefined)
+    let numCreepsUpgradingController = peasants.filter(creep => creep.memory.job !== undefined)
       .filter(creep => creep.memory.job.action === job.action && creep.memory.job.target === job.target).length;
 
-    if (numCreepsUpgradingTower > 0) {
+    if (numCreepsUpgradingController > 0) {
       return;
     }
 
