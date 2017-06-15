@@ -4,7 +4,7 @@ function AssignWaitingPeasantsToUpgradeController(room) {
     target: room.controller.id
   };
 
-  this.assignJobs = function (peasants, ongoingJobs) {
+  this.assignJobs = function (peasants) {
     peasants
       .filter(creep => creep.memory.job === undefined)
       .forEach(creep => {

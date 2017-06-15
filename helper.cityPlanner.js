@@ -1,13 +1,13 @@
-let DeliveryEnergyToController = require('job-builder.deliver-energy-to-controller');
-let DeliverEnergyToSpawn = require('job-builder.deliver-energy-to-spawn');
-let DeliverEnergyToExtensions = require('job-builder.deliver-energy-to-extensions');
-let DeliverEnergyToConstructionSites = require('job-builder.deliver-energy-to-construction-sites');
-let AssignWaitingPeasantsToUpgradeController = require('job-builder.assign-waiting-peasants-to-upgrade-controller');
+let DeliveryEnergyToController = require('task-launcher.deliver-energy-to-controller');
+let DeliverEnergyToSpawn = require('task-launcher.deliver-energy-to-spawn');
+let DeliverEnergyToExtensions = require('task-launcher.deliver-energy-to-extensions');
+let DeliverEnergyToConstructionSites = require('task-launcher.deliver-energy-to-construction-sites');
+let AssignWaitingPeasantsToUpgradeController = require('task-launcher.assign-waiting-peasants-to-upgrade-controller');
 
 let CityPlanner = function () {
 
   this.assignJobs = function (room) {
-    let jobBuilders = [
+    let taskLaunchers = [
       new DeliveryEnergyToController(room),
       new DeliverEnergyToSpawn(room),
       new DeliverEnergyToExtensions(room),
@@ -18,7 +18,7 @@ let CityPlanner = function () {
     let peasants = room.find(FIND_MY_CREEPS).filter(creep => creep.memory.role === 'peasant');
     let ongoingJobs = new JobList(room);
 
-    jobBuilders.forEach(builder => builder.assignJobs(peasants, ongoingJobs));
+    taskLaunchers.forEach(builder => builder.assignJobs(peasants, ongoingJobs));
   };
 };
 

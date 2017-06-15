@@ -8,11 +8,11 @@ function DeliverEnergyToExtensions(room) {
           target: spawn.id
         };
 
-        let remainingEnergy = s.energyCapacity - s.energy;
+        let remainingEnergy = spawn.energyCapacity - spawn.energy;
 
         // Calculate how much energy is remaining after the creeps assigned to the spawn have completed their job.
         peasants
-          .filter(creep => creep.memory.job !== undefined && creep.memory.job.action === 'deposit' && creep.memory.job.target === s.id)
+          .filter(creep => creep.memory.job !== undefined && creep.memory.job.action === 'deposit' && creep.memory.job.target === spawn.id)
           .forEach(creep => {
             if (creep.carry.energy > 0) {
               remainingEnergy -= creep.carry.energy;

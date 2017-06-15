@@ -1,5 +1,5 @@
 function DeliverEnergyToConstructionSites(room) {
-  this.assignJobs = function (peasants, ongoingJobs) {
+  this.assignJobs = function (peasants) {
     room.find(FIND_MY_CONSTRUCTION_SITES)
       .forEach(site => {
         let job = {

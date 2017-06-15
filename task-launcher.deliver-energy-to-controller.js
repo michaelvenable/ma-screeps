@@ -6,11 +6,16 @@ function DeliverEnergyToController(room) {
 
   this.assignJobs = function (peasants, ongoingJobs) {
     // If there is more than one creep, then always have at least one creep upgrading the controller.
-    if (peasants.length < 2)
+    if (peasants.length < 2) {
       return;
+    }
 
-    if (ongoingJobs.contains(job))
+    let numCreepsUpgradingTower = peasants.filter(creep => creep.memory.job !== undefined)
+      .filter(creep => creep.memory.job.action === job.action && creep.memory.job.target === job.target).length;
+
+    if (numCreepsUpgradingTower > 0) {
       return;
+    }
 
     let waitingCreeps = peasants.filter(creep => creep.memory.job === undefined);
 
