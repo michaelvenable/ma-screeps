@@ -5,7 +5,7 @@ function DeliverEnergyToController(room) {
             return;
         }
 
-        let job =  {
+        let task =  {
             action: 'upgrade',
             target: room.controller.id
         };
@@ -16,7 +16,7 @@ function DeliverEnergyToController(room) {
         }
 
         let numCreepsUpgradingController = peasants.filter(creep => creep.memory.job !== undefined)
-            .filter(creep => creep.memory.job.action === job.action && creep.memory.job.target === job.target).length;
+            .filter(creep => creep.memory.job.action === task.action && creep.memory.job.target === task.target).length;
 
         if (numCreepsUpgradingController > 0) {
             return;
@@ -25,14 +25,14 @@ function DeliverEnergyToController(room) {
         let waitingCreeps = peasants.filter(creep => creep.memory.job === undefined);
 
         if (waitingCreeps.length > 0) {
-            assignJobToCreep(job, waitingCreeps[0]);
+            assignTaskToCreep(task, waitingCreeps[0]);
         }
     }
 
-    function assignJobToCreep(job, creep) {
-        creep.memory.job = job;
+    function assignTaskToCreep(task, creep) {
+        creep.memory.job = task;
         creep.memory.action = undefined;
-        console.log(`${creep} is tasked with ${job.action} to ${job.target} (controller).`);
+        console.log(`${creep} is tasked with ${task.action} to ${task.target} (controller).`);
     }
 }
 
