@@ -5,14 +5,14 @@ function run(creep) {
         creep.memory.job = undefined;
         return;
     }
-    
+
     if (creep.carry.energy === creep.carryCapacity && creep.memory.action === 'harvesting') {
         creep.memory.action = 'delivering';
     }
     if (creep.memory.action === undefined) {
         creep.memory.action = 'harvesting';
     }
-    
+
     if (creep.memory.action === 'harvesting') {
         let sources = creep.room.find(FIND_SOURCES);
         if (sources.length > 0) {
@@ -44,7 +44,7 @@ function run(creep) {
             } else if (result !== OK) {
                 console.log(`${creep} could not upgrade: ${result}.`);
             }
-        }            
+        }
     }
 }
 

@@ -1,10 +1,8 @@
 let buildAction = require('action.build');
 let depositAction = require('action.deposit');
 let deliveringAction = require('action.delivering');
-let patrolAction = require('action.patrol');
 
 let Architect = require('class.architect');
-let Commander = require('helper.commander');
 
 let roleSpawner = require('role.spawner');
 
@@ -31,7 +29,6 @@ module.exports.loop = function () {
 
     runArchitect();
     assignTasksToPeasants();
-    assignOrders();
     runTowers();
 
     for (let spawnName in Game.spawns) {
@@ -56,8 +53,6 @@ module.exports.loop = function () {
             deliveringAction.run(creep);
         } else if (creep.memory.job.action === 'build') {
             buildAction.run(creep);
-        } else if (creep.memory.job.action === 'patrol') {
-            patrolAction.run(creep);
         } else {
             console.log(`${creep} has an unrecognized job.`);
         }
@@ -99,15 +94,6 @@ function assignTasksToPeasants() {
 
         let peasants = room.find(FIND_MY_CREEPS).filter(creep => creep.memory.role === 'peasant');
         coordinators.forEach(builder => builder.assignJobs(peasants));
-    }
-}
-
-function assignOrders() {
-    let commander = new Commander();
-
-    for (let roomName in Game.rooms) {
-        let room = Game.rooms[roomName];
-        commander.assignOrders(room);
     }
 }
 

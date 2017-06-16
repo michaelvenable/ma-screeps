@@ -44,7 +44,7 @@ function DeliverEnergyToTowers(room) {
         creep.memory.action = undefined;
 
         if (reason === undefined) {
-            console.log(`${creep} is tasked with ${task.action} to ${task.target} (tower) (spawn)`);
+            console.log(`${creep} is tasked with ${task.action} to ${task.target} (tower).`);
         } else {
             console.log(`${creep} is tasked with ${task.action} to ${task.target} (tower), because ${reason}.`);
         }
