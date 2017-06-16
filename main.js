@@ -4,17 +4,21 @@ let deliveringAction = require('action.delivering');
 let patrolAction = require('action.patrol');
 
 let Architect = require('class.architect');
-let CityPlanner = require('helper.cityPlanner');
 let Commander = require('helper.commander');
-
-let actions = require('constants').actions;
-let roles = require('constants').roles;
-let visuals = require('constants').visuals;
 
 let roleSpawner = require('role.spawner');
 
+let DeliveryEnergyToController = require('coordinator.deliver-energy-to-controller');
+let DeliverEnergyToSpawn = require('coordinator.deliver-energy-to-spawn');
+let DeliverEnergyToExtensions = require('coordinator.deliver-energy-to-extensions');
+let DeliverEnergyToConstructionSites = require('coordinator.deliver-energy-to-construction-sites');
+let AssignWaitingPeasantsToUpgradeController = require('coordinator.assign-waiting-peasants-to-upgrade-controller');
+let DeliverEnergyToTowers = require('coordinator.deliver-energy-to-towers');
+
+let towerAi = require('tower-ai');
+
 module.exports.loop = function () {
-    console.log("==========================================");
+    console.log(`================== (Tick: ${Game.time}) ==================`);
 
     for (let spawnName in Game.spawns) {
         let spawn = Game.spawns[spawnName];
@@ -26,8 +30,9 @@ module.exports.loop = function () {
     }
 
     runArchitect();
-    assignJobs();
+    assignTasksToPeasants();
     assignOrders();
+    runTowers();
 
     for (let spawnName in Game.spawns) {
         let spawn = Game.spawns[spawnName];
@@ -76,12 +81,24 @@ function runArchitect() {
     }
 }
 
-function assignJobs() {
-    let cityPlanner = new CityPlanner();
-
+/**
+ * Assigns tasks to peasants in each room.
+ */
+function assignTasksToPeasants() {
     for (let roomName in Game.rooms) {
         let room = Game.rooms[roomName];
-        cityPlanner.assignJobs(room);
+
+        let coordinators = [
+            new DeliveryEnergyToController(room),
+            new DeliverEnergyToSpawn(room),
+            new DeliverEnergyToExtensions(room),
+            new DeliverEnergyToConstructionSites(room),
+            new DeliverEnergyToTowers(room),
+            new AssignWaitingPeasantsToUpgradeController(room),
+        ];
+
+        let peasants = room.find(FIND_MY_CREEPS).filter(creep => creep.memory.role === 'peasant');
+        coordinators.forEach(builder => builder.assignJobs(peasants));
     }
 }
 
@@ -91,5 +108,16 @@ function assignOrders() {
     for (let roomName in Game.rooms) {
         let room = Game.rooms[roomName];
         commander.assignOrders(room);
+    }
+}
+
+/**
+ * Runs the AI for all towers in all rooms.
+ */
+function runTowers() {
+    for (let roomName in Game.rooms) {
+        let room = Game.rooms[roomName];
+        let towers = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER }});
+        towers.forEach(tower => towerAi.run(tower));
     }
 }
