@@ -17,7 +17,7 @@ function AssignWaitingPeasantsToUpgradeController(room) {
     creep.memory.action = undefined;
 
     if (reason === undefined) {
-      console.log(`${creep} is tasked with ${job.action} to ${job.target} (spawn)`);
+      console.log(`${creep} is tasked with ${job.action} to ${job.target} (controller).`);
     } else {
       console.log(`${creep} is tasked with ${job.action} to ${job.target}, because ${reason}.`);
     }
