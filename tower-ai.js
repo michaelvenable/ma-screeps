@@ -7,7 +7,10 @@ var towerAi = towerAi || {};
  */
 towerAi.run = function (tower) {
     let intruders = tower.room.find(FIND_HOSTILE_CREEPS);
-    intruders.forEach(intruder => attackIntruder(tower, intruder));
+
+    intruders
+        .filter(intruder => intruder.owner.username !== 'HOBAKK')
+        .forEach(intruder => attackIntruder(tower, intruder));
 }
 
 /**
