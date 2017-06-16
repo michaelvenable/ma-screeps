@@ -15,6 +15,8 @@ let DeliverEnergyToConstructionSites = require('coordinator.deliver-energy-to-co
 let AssignWaitingPeasantsToUpgradeController = require('coordinator.assign-waiting-peasants-to-upgrade-controller');
 let DeliverEnergyToTowers = require('coordinator.deliver-energy-to-towers');
 
+let towerAi = require('tower-ai');
+
 module.exports.loop = function () {
     console.log(`================== (Tick: ${Game.time}) ==================`);
 
@@ -28,8 +30,9 @@ module.exports.loop = function () {
     }
 
     runArchitect();
-    assignTasks();
+    assignTasksToPeasants();
     assignOrders();
+    runTowers();
 
     for (let spawnName in Game.spawns) {
         let spawn = Game.spawns[spawnName];
@@ -81,7 +84,7 @@ function runArchitect() {
 /**
  * Assigns tasks to peasants in each room.
  */
-function assignTasks() {
+function assignTasksToPeasants() {
     for (let roomName in Game.rooms) {
         let room = Game.rooms[roomName];
 
@@ -105,5 +108,16 @@ function assignOrders() {
     for (let roomName in Game.rooms) {
         let room = Game.rooms[roomName];
         commander.assignOrders(room);
+    }
+}
+
+/**
+ * Runs the AI for all towers in all rooms.
+ */
+function runTowers() {
+    for (let roomName in Game.rooms) {
+        let room = Game.rooms[roomName];
+        let towers = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER }});
+        towers.forEach(tower => towerAi.run(tower));
     }
 }
