@@ -8,17 +8,14 @@ function run(tower) {
         .filter(intruder => intruder.owner.username !== 'HOBAKK');
 
     if (intruders.length > 0) {
-        console.log("Intruder!!!");
         attackIntruder(tower, intruders[0]);
         return;
     }
-
 
     let damagedRoads = tower.room.find(FIND_STRUCTURES)
         .filter(structure => structure.structureType === STRUCTURE_ROAD)
         .filter(road => road.hits < road.hitsMax * 0.8);
 
-    console.log(`structures : ${damagedRoads.length}`);
     if (damagedRoads.length > 0) {
         repairStructure(tower, damagedRoads[0]);
         return;
