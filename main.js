@@ -4,7 +4,7 @@ let deliveringAction = require('action.delivering');
 
 let Architect = require('class.architect');
 
-let roleSpawner = require('role.spawner');
+let ai = require('ai');
 
 let DeliveryEnergyToController = require('coordinator.deliver-energy-to-controller');
 let DeliverEnergyToSpawn = require('coordinator.deliver-energy-to-spawn');
@@ -33,7 +33,7 @@ module.exports.loop = function () {
 
     for (let spawnName in Game.spawns) {
         let spawn = Game.spawns[spawnName];
-        roleSpawner.run(spawn);
+        ai.spawn.run(spawn);
     }
 
     for (let creepName in Game.creeps) {
