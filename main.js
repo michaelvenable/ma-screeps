@@ -30,6 +30,7 @@ module.exports.loop = function () {
     runArchitect();
     assignTasksToPeasants();
     runTowers();
+    runControllers();
 
     for (let spawnName in Game.spawns) {
         let spawn = Game.spawns[spawnName];
@@ -94,6 +95,19 @@ function assignTasksToPeasants() {
 
         let peasants = room.find(FIND_MY_CREEPS).filter(creep => creep.memory.role === 'peasant');
         coordinators.forEach(builder => builder.assignJobs(peasants));
+    }
+}
+
+/**
+ * Runs the AI for all controllers in all rooms.
+ */
+function runControllers() {
+    for (let roomName in Game.rooms) {
+        let room = Game.rooms[roomName];
+
+        if (room.controller !== undefined && room.controller.my) {
+            ai.controller.run(room.controller);
+        }
     }
 }
 
