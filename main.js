@@ -13,8 +13,6 @@ let DeliverEnergyToConstructionSites = require('coordinator.deliver-energy-to-co
 let AssignWaitingPeasantsToUpgradeController = require('coordinator.assign-waiting-peasants-to-upgrade-controller');
 let DeliverEnergyToTowers = require('coordinator.deliver-energy-to-towers');
 
-let towerAi = require('tower-ai');
-
 module.exports.loop = function () {
     console.log(`================== (Tick: ${Game.time}) ==================`);
 
@@ -118,6 +116,6 @@ function runTowers() {
     for (let roomName in Game.rooms) {
         let room = Game.rooms[roomName];
         let towers = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER }});
-        towers.forEach(tower => towerAi.run(tower));
+        towers.forEach(tower => ai.tower.run(tower));
     }
 }
