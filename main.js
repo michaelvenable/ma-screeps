@@ -22,7 +22,6 @@ module.exports.loop = function () {
         let peasants = spawn.room.find(FIND_MY_CREEPS).filter(c => c.memory.role === 'peasant');
         console.log(`Peasants (${spawn.room.name}): ${peasants.length}`);
         let guards = spawn.room.find(FIND_MY_CREEPS).filter(c => c.memory.role === 'guard');
-        console.log(`Guards: (${spawn.room.name}): ${guards.length}`);
     }
 
     runArchitect();
