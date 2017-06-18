@@ -10,64 +10,102 @@ function run(room) {
     let spawns = room.find(FIND_MY_SPAWNS);
 
     spawns.forEach(spawn => {
-        let towerBuilt = false;
-        let numTriesRemaining = 5;
+        let radius = 6;
 
-        while (!towerBuilt && numTriesRemaining > 0) {
-            if (!doesSpawnHaveTower(room, spawn)) {
-                let desiredPosition = getPositionNearSpawn(spawn);
-
-                if (!helpers.isSomethingHere(room, desiredPosition)) {
-                    if (helpers.placeTower(room, desiredPosition.x, desiredPosition.y)) {
-                        towerBuilt = true;
-                    }
-                }
+        let boundingBox = {
+            topLeft: {
+                x: spawn.pos.x - radius,
+                y: spawn.pos.y - radius
+            },
+            bottomRight: {
+                x: spawn.pos.x + radius,
+                y: spawn.pos.y + radius
             }
+        };
 
-            numTriesRemaining -= 1;
+        if (doesAreaContainStructure(room, boundingBox, [STRUCTURE_TOWER])) {
+            return;
         }
+
+        let locations = getLocationsInArea(boundingBox)
+            .filter(location => room.lookAt(location.x, location.y).length < 2);
+
+        let randomIndex = Math.floor(Math.random() * locations.length);
+
+        let location = locations[randomIndex];
+
+        helpers.placeTower(room, location.x, location.y);
     });
 }
 
-function doesSpawnHaveTower(room, spawn) {
-    let boundingBox = {
-        topLeft: {
-            x: spawn.pos.y - 6,
-            y: spawn.pos.x - 6
-        },
-        bottomRight: {
-            x: spawn.pos.y + 6,
-            y: spawn.pos.x + 6
-        }
-    };
-
+/**
+ * Determines if an area contains a particular type of structure or if a construction site has been placed for
+ * a particular type of struction in the area.
+ *
+ * @param room {Room}               The room that contains the area.
+ * @param boundingBox {object}      Defines the boundary of the area to search. The boundary edges are included.
+ * @param structureType {string[]}  The structure type(s) to search for. Array of STRUCTURE_* constants. 
+ *
+ * @example
+ * let boundingBox = {
+ *     topLeft: {
+ *         x: 10,
+ *         y: 5
+ *     },
+ *     bottomRight: {
+ *         x: 20,
+ *         y: 15
+ *     }
+ * };
+ * doesAreaContainStructure(room, boundingBox, [STRUCTURE_SPAWN]);
+ */
+function doesAreaContainStructure(room, boundingBox, structureTypes) {
     let asArray = true;
+
     let structures = room.lookForAtArea(LOOK_STRUCTURES, boundingBox.top, boundingBox.left, boundingBox.bottom, boundingBox.right, asArray);
-    if (structures.filter(s => s.structureType === STRUCTURE_TOWER).length > 0) {
-      return true;
+    if (structures.find(structure => structureTypes.includes(structure.structureType))) {
+        return true;
     }
 
     let constructionSites = room.lookForAtArea(LOOK_CONSTRUCTION_SITES, boundingBox.top, boundingBox.left, boundingBox.bottom, boundingBox.right, asArray);
-    // If there is a construction site nearby, assume that it might be a tower.
-    if (constructionSites.length > 0) {
-      return true;
+    if (constructionSites.find(site => structureTypes.includes(site.structureType))) {
+        return true;
     }
 
     return false;
 }
 
-function getPositionNearSpawn(spawn) {
-    // Pick a random spot within a 7x7 grid around the spawn.
-    let minX = spawn.pos.x - 3;
-    let maxX = spawn.pos.x + 3;
+/**
+ * Returns a collection of locations, one for each tile, in an area.
+ *
+ * @param boundingBox {object}  Defines the area.
+ *
+ * @return {object[]}   Array of all locations contained within the bounding box, edges included.
+ *
+ * @example
+ * let boundingBox = {
+ *     topLeft: {
+ *         x: 5,
+ *         y: 5
+ *     },
+ *     bottomRight: {
+ *         x: 6,
+ *         y: 6
+ *     }
+ * };
+ * getLocationsInArea(boundingBox);
+ * => [{x: 5, y: 5}, {x: 5, y: 6}, {x: 6, y: 5}, {x: 6, y: 6}]
+ */
+function getLocationsInArea(boundingBox) {
+    let locations = [];
 
-    let minY = spawn.pos.y - 3;
-    let maxY = spawn.pos.y + 3;
+    for (let x = boundingBox.topLeft.x; x < boundingBox.bottomRight.x; x++) {
+        for (let y = boundingBox.topLeft.y; y < boundingBox.bottomRight.y; y++) {
+            locations.push({ x: x, y: y});
+        }
+    }
 
-    let desiredX = Math.floor(Math.random() * (maxX - minX) + minX);
-    let desiredY = Math.floor(Math.random() * (maxY - minY) + minY);
-
-    return { x: desiredX, y: desiredY };
+    return locations;
 }
 
 module.exports = {
