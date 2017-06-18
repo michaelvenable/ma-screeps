@@ -3,7 +3,6 @@ let depositAction = require('action.deposit');
 let deliveringAction = require('action.delivering');
 
 let ai = require('ai');
-let overseers = require('overseers');
 
 let DeliveryEnergyToController = require('coordinator.deliver-energy-to-controller');
 let DeliverEnergyToSpawn = require('coordinator.deliver-energy-to-spawn');
@@ -22,7 +21,8 @@ module.exports.loop = function () {
         console.log(`Peasants (${spawn.room.name}): ${peasants.length}`);
     }
 
-    runArchitect();
+    ai.architect.run();
+
     assignTasksToPeasants();
     runTowers();
     runControllers();
@@ -51,23 +51,6 @@ module.exports.loop = function () {
             buildAction.run(creep);
         } else {
             console.log(`${creep} has an unrecognized job.`);
-        }
-    }
-}
-
-function runArchitect() {
-    for (let spawnName in Game.spawns) {
-        let spawn = Game.spawns[spawnName];
-
-        if (Memory.lastBuildTime === undefined) {
-            Memory.lastBuildTime = Game.time;
-        }
-
-        // console.log(`${Game.time} ${Memory.lastBuildTime}`);
-
-        if (Game.time >= (Memory.lastBuildTime + 100)) {
-            Memory.lastBuildTime = Game.time;
-            new overseers.Architect(spawn.room).establishConstructionSites();
         }
     }
 }
