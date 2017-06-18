@@ -62,7 +62,7 @@ function run(room) {
 function doesAreaContainStructure(room, boundingBox, structureTypes) {
     let asArray = true;
 
-    let structures = room.lookForAtArea(LOOK_STRUCTURES,
+    let structures = room.lookForAtArea(LOOK_STRUCTURES, boundingBox.topLeft.y, boundingBox.topLeft.x, boundingBox.bottomRight.y, boundingBox.bottomRight.x, asArray);
     if (structures.find(item => structureTypes.includes(item.structure.structureType))) {
         return true;
     }
