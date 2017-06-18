@@ -1,14 +1,22 @@
 let roles = require('constants').roles;
 
-function getCreepsByRole(role) {
-    return _.filter(Game.creeps, creep => creep.memory.role === role);
-}
-
 function numberOfCreepsInRole(role) {
     return getCreepsByRole(role).length;
 }
 
+/**
+ * Retreives an element from an array at random.
+ *
+ * @param array {object[]}  Array containing candidtates for selection.
+ *
+ * @return {object} Element from array chosen at random.
+ */
+function pickRandomElement(array) {
+    let randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
+}
+
 module.exports = {
-    getCreepsByRole: getCreepsByRole,
-    numberOfCreepsInRole: numberOfCreepsInRole
+    numberOfCreepsInRole: numberOfCreepsInRole,
+    pickRandomElement: pickRandomElement
 }
