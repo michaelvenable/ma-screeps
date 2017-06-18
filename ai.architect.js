@@ -8,9 +8,9 @@ function run() {
         Memory.lastBuildTime = Game.time;
     }
 
-    // if (Game.time < (Memory.lastBuildTime + 100)) {
-    //     return;
-    // }
+    if (Game.time < (Memory.lastBuildTime + 100)) {
+        return;
+    }
 
     Memory.lastBuildTime = Game.time;
 
