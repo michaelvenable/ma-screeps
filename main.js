@@ -2,9 +2,8 @@ let buildAction = require('action.build');
 let depositAction = require('action.deposit');
 let deliveringAction = require('action.delivering');
 
-let Architect = require('class.architect');
-
 let ai = require('ai');
+let overseers = require('overseers');
 
 let DeliveryEnergyToController = require('coordinator.deliver-energy-to-controller');
 let DeliverEnergyToSpawn = require('coordinator.deliver-energy-to-spawn');
@@ -21,7 +20,6 @@ module.exports.loop = function () {
 
         let peasants = spawn.room.find(FIND_MY_CREEPS).filter(c => c.memory.role === 'peasant');
         console.log(`Peasants (${spawn.room.name}): ${peasants.length}`);
-        let guards = spawn.room.find(FIND_MY_CREEPS).filter(c => c.memory.role === 'guard');
     }
 
     runArchitect();
@@ -69,7 +67,7 @@ function runArchitect() {
 
         if (Game.time >= (Memory.lastBuildTime + 100)) {
             Memory.lastBuildTime = Game.time;
-            new Architect(spawn.room).establishConstructionSites();
+            new overseers.Architect(spawn.room).establishConstructionSites();
         }
     }
 }
