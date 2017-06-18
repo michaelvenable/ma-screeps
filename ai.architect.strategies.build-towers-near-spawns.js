@@ -68,7 +68,7 @@ function doesAreaContainStructure(room, boundingBox, structureTypes) {
     }
 
     let constructionSites = room.lookForAtArea(LOOK_CONSTRUCTION_SITES, boundingBox.topLeft.y, boundingBox.topLeft.x, boundingBox.bottomRight.y, boundingBox.bottomRight.x, asArray);
-    if (constructionSites.find(item => structureTypes.includes(item.structure.structureType))) {
+    if (constructionSites.find(item => structureTypes.includes(item.constructionSite.structureType))) {
         return true;
     }
 
