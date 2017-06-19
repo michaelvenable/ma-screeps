@@ -56,39 +56,6 @@ function establishRoadConstructionSite(room, location) {
     }
 }
 
-/**
- * Returns a collection of locations, one for each tile, in an area.
- *
- * @param boundingBox {object}  Defines the area.
- *
- * @return {object[]}   Array of all locations contained within the bounding box, edges included.
- *
- * @example
- * let boundingBox = {
- *     topLeft: {
- *         x: 5,
- *         y: 5
- *     },
- *     bottomRight: {
- *         x: 6,
- *         y: 6
- *     }
- * };
- * getLocationsInArea(boundingBox);
- * => [{x: 5, y: 5}, {x: 5, y: 6}, {x: 6, y: 5}, {x: 6, y: 6}]
- */
-function getLocationsInArea(boundingBox) {
-    let locations = [];
-
-    for (let x = boundingBox.topLeft.x; x < boundingBox.bottomRight.x; x++) {
-        for (let y = boundingBox.topLeft.y; y < boundingBox.bottomRight.y; y++) {
-            locations.push({ x: x, y: y});
-        }
-    }
-
-    return locations;
-}
-
 function isSomethingHere(room, location) {
     return room.lookAt(location.x, location.y).length > 1;
 }
@@ -108,7 +75,6 @@ module.exports = {
     doesAreaContainStructure: doesAreaContainStructure,
     establishRoad: establishRoad,
     establishRoadConstructionSite: establishRoadConstructionSite,
-    getLocationsInArea: getLocationsInArea,
     isSomethingHere: isSomethingHere,
     placeTower: placeTower
 };
