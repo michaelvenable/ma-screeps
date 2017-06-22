@@ -1,3 +1,5 @@
+let helpers = require('helpers');
+
 /**
  * Represents an area (represented as a bounding box) that is suitable for building energy extensions.
  *
@@ -42,8 +44,34 @@ function ExtensionSiteCandidate(room, boundingBox) {
      * Indication of how suitable this area is for building. Higher scores are better.
      */
     this.getScore = function () {
-        return this.getNumberOfExtensionsAllowed() * extensionScoreValue;
+        return this.getNumberOfExtensionsAllowed() * extensionScoreValue - getAverageDistanceToSpawns();
     };
+
+    /**
+     * Calculates the average distance from this site candidate to the spawns in this room.
+     *
+     * @return {number}     The average distance from the center of this candidate to each spawn in this room.
+     *                      The number is not rounded, so it is possible it is not a whole number.
+     */
+    function getAverageDistanceToSpawns() {
+        let sumOfDistance = 0;
+        let numOfSpawns = 0;
+
+        let center = boundingBox.getCenter();
+
+        room.find(FIND_MY_SPAWNS)
+            .forEach((spawn) => {
+                sumOfDistance += helpers.distance(spawn.pos, center);
+                numOfSpawns++;
+            });
+
+        if (numOfSpawns === 0) {
+            console.error('You are trying to place extensions in a room with no spawns. Why?');
+            return 0;
+        }
+
+        return sumOfDistance / numOfSpawns;
+    }
 }
 
 /**
@@ -53,9 +81,9 @@ ExtensionSiteCandidate.compareFunction = function (a, b) {
     let aScore = a.getScore();
     let bScore = b.getScore();
 
-    if (aScore < bScore) {
+    if (aScore > bScore) {
         return -1;
-    } else if (aScore > bScore) {
+    } else if (aScore < bScore) {
         return 1;
     }
 
