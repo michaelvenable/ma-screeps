@@ -1,11 +1,10 @@
 /**
  * Represents an area (represented as a bounding box) that is suitable for building energy extensions.
  *
- * @param numExtensionsSupported {number}   Number of extensions that can be built in this area.
- * @param boundingBox {BoundingBox}         Encloses the area where the extensions can be built.
- *
+ * @param room {Room}                   Room that will contain the extensions.
+ * @param boundingBox {BoundingBox}     Encloses the area where the extensions can be built.
  */
-function ExtensionSiteCandidate(numExtensionsSupported, boundingBox) {
+function ExtensionSiteCandidate(room, boundingBox) {
     let extensionScoreValue = 5;
 
     /**
@@ -23,11 +22,44 @@ function ExtensionSiteCandidate(numExtensionsSupported, boundingBox) {
     }
 
     /**
+     * Calculates the number of extensions that can be supported by this site. The calculated depends on the
+     * size of the site.
+     *
+     * @return {number}     Number of extensions that can fit on this site while still ensuring creeps have
+     *                      room to maneuver. Never less than zero.
+     */
+    this.getNumberOfExtensionsAllowed = function () {
+        if (this.boundingBox.getWidth() === 3 && this.boundingBox.getHeight() === 3) {
+            // A 3x3 grid can fit a single extension in the center.
+            return 1;
+        } else {
+            console.error('An oddly shaped candidated was created for extensions.');
+            return 0;
+        }
+    };
+
+    /**
      * Indication of how suitable this area is for building. Higher scores are better.
      */
     this.getScore = function () {
-        return numExtensionsSupported * extensionScoreValue;
+        return this.getNumberOfExtensionsAllowed() * extensionScoreValue;
     };
 }
+
+/**
+ * Compare function that can be used to sort extension site candidates.
+ */
+ExtensionSiteCandidate.compareFunction = function (a, b) {
+    let aScore = a.getScore();
+    let bScore = b.getScore();
+
+    if (aScore < bScore) {
+        return -1;
+    } else if (aScore > bScore) {
+        return 1;
+    }
+
+    return 0;
+};
 
 module.exports = ExtensionSiteCandidate;

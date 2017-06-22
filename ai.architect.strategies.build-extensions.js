@@ -10,10 +10,12 @@ let models = require('ai.architect.models');
  */
 function run(room) {
     let map = buildMap(room);
-    let buildAreas = locateIdealAreas(map);
+    let candidates = locateIdealAreas(map);
 
-    if (buildAreas.length > 0) {
-        let location = buildAreas[0].getCenter();
+    if (candidates.length > 0) {
+        let areas = candidates.sort(models.ExtensionSiteCandidate.compareFunction);
+
+        let location = areas[0].getCenter();
         console.log(`Building extension at ${location.x}, ${location.y}.`);
 
         let result = room.createConstructionSite(location.x, location.y, STRUCTURE_EXTENSION);
