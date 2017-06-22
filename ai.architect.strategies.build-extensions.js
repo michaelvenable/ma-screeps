@@ -10,7 +10,7 @@ let models = require('ai.architect.models');
  */
 function run(room) {
     let map = buildMap(room);
-    let candidates = locateIdealAreas(map);
+    let candidates = locateIdealAreas(room, map);
 
     if (candidates.length > 0) {
         let areas = candidates.sort(models.ExtensionSiteCandidate.compareFunction);
@@ -28,6 +28,7 @@ function run(room) {
 /**
  * Searches the map for areas that are suitable for extension construction sites.
  *
+ * @param room {Room}       Room that will contain the sites.
  * @param map {number[][]}  Two-dimensional that specifies whethere each tile in a room is suitable for
  *                          building. If map[y][x] is 1, then the location on the map at x, y is an obstacle
  *                          and cannot be built upon. If map[y][x] is 0, then the location is empty and can be
@@ -37,7 +38,7 @@ function run(room) {
  *                                      can be sorted by score to order by the most optimal locations. Higher
  *                                      scores represent better locations.
  */
-function locateIdealAreas(map) {
+function locateIdealAreas(room, map) {
     let areas = [];
 
     for (let y = 1; y < 46; y++) {
@@ -47,7 +48,7 @@ function locateIdealAreas(map) {
                 map[y+2][x] === 0 && map[y+2][x+1] === 0 && map[y+2][x+2] === 0) {
 
                 let boundary = BoundingBox.fromCoordinates({ x: x, y: y }, { x: x + 2, y: y + 2 })
-                areas.push(new models.ExtensionSiteCandidate(1, boundary));
+                areas.push(new models.ExtensionSiteCandidate(room, boundary));
             }
         }
     }
