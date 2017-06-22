@@ -37,6 +37,15 @@ function BoundingBox(center, radius) {
     };
 
     /**
+     * Calculates the height of this bounding box.
+     *
+     * @return {number}     Height of this bounding box, specified in tiles.
+     */
+    this.getHeight = function () {
+        return this.bottomRight.y - this.topLeft.y + 1;
+    };
+
+    /**
      * Returns the locations contained within this bounding box as an array.
      *
      * @example
@@ -56,6 +65,15 @@ function BoundingBox(center, radius) {
         }
 
         return locations;
+    };
+
+    /**
+     * Calculates the width of this bounding box.
+     *
+     * @return {number}     Width of this bounding box, specified in tiles.
+     */
+    this.getWidth = function () {
+        return this.bottomRight.x - this.topLeft.x + 1;
     };
 
     /**
