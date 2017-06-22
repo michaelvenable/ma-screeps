@@ -15,6 +15,7 @@ function run() {
     Memory.lastBuildTime = Game.time;
 
     let employedStrategies = [
+        strategies.buildExtensions,
         strategies.buildRoadFromSpawnToEnergy,
         strategies.buildRoadFromEnergyToController,
         strategies.buildTowersNearSpawns,

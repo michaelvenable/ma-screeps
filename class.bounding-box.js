@@ -25,6 +25,18 @@ function BoundingBox(center, radius) {
     };
 
     /**
+     * Calculates the center of this bounding box.
+     *
+     * @return {object} Object with X, Y values.
+     */
+    this.getCenter = function () {
+        return {
+            x: Math.floor((this.bottomRight.x + this.topLeft.x) / 2),
+            y: Math.floor((this.bottomRight.y + this.topLeft.y) / 2)
+        };
+    };
+
+    /**
      * Returns the locations contained within this bounding box as an array.
      *
      * @example
@@ -45,6 +57,22 @@ function BoundingBox(center, radius) {
 
         return locations;
     };
+
+    /**
+     * String representation.
+     */
+    this.toString = function () {
+        return `(${this.topLeft.x}, ${this.topLeft.y}) - (${this.bottomRight.x}, ${this.bottomRight.y})`;
+    }
 }
+
+BoundingBox.fromCoordinates = function (topLeft, bottomRight) {
+    let box = new BoundingBox(0, 0);
+
+    box.topLeft = topLeft;
+    box.bottomRight = bottomRight;
+
+    return box;
+};
 
 module.exports = BoundingBox;
