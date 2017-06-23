@@ -10,23 +10,28 @@ let models = require('ai.architect.models');
  */
 function run(room) {
     let map = buildMap(room);
-    let candidates = locateIdealAreas(room, map);
+    let candidates = locateThreeByThree(room, map);
+
+    locateThreeByFour(room, map).forEach(c => candidates.push(c));
 
     if (candidates.length > 0) {
         let areas = candidates.sort(models.ExtensionSiteCandidate.compareFunction);
 
-        let location = areas[0].getCenter();
-        console.log(`Building extension at ${location.x}, ${location.y}.`);
+        let locations = areas[0].getBuildLocations();
+        locations.forEach(location => {
+            console.log(`Building extension at ${location.x}, ${location.y}.`);
 
-        let result = room.createConstructionSite(location.x, location.y, STRUCTURE_EXTENSION);
-        if (result !== OK) {
-            console.log(`Failed to build extension: ${result}`);
-        }
+            let result = room.createConstructionSite(location.x, location.y, STRUCTURE_EXTENSION);
+            if (result !== OK) {
+                console.log(`Failed to build extension: ${result}`);
+            }
+        });
+
     }
 }
 
 /**
- * Searches the map for areas that are suitable for extension construction sites.
+ * Searches the map for 3x3 areas that are suitable for extension construction sites.
  *
  * @param room {Room}       Room that will contain the sites.
  * @param map {number[][]}  Two-dimensional that specifies whethere each tile in a room is suitable for
@@ -38,7 +43,7 @@ function run(room) {
  *                                      can be sorted by score to order by the most optimal locations. Higher
  *                                      scores represent better locations.
  */
-function locateIdealAreas(room, map) {
+function locateThreeByThree(room, map) {
     let areas = [];
 
     for (let y = 1; y < 46; y++) {
@@ -48,6 +53,38 @@ function locateIdealAreas(room, map) {
                 map[y+2][x] === 0 && map[y+2][x+1] === 0 && map[y+2][x+2] === 0) {
 
                 let boundary = BoundingBox.fromCoordinates({ x: x, y: y }, { x: x + 2, y: y + 2 })
+                areas.push(new models.ExtensionSiteCandidate(room, boundary));
+            }
+        }
+    }
+
+    return areas;
+}
+
+/**
+ * Searches the map for 3x4 areas that are suitable for extension construction sites.
+ *
+ * @param room {Room}       Room that will contain the sites.
+ * @param map {number[][]}  Two-dimensional that specifies whethere each tile in a room is suitable for
+ *                          building. If map[y][x] is 1, then the location on the map at x, y is an obstacle
+ *                          and cannot be built upon. If map[y][x] is 0, then the location is empty and can be
+ *                          built upon.
+ *
+ * @return {ExtensionSiteCandidate[]}   Collection of candidates where extensions can be built. The collection
+ *                                      can be sorted by score to order by the most optimal locations. Higher
+ *                                      scores represent better locations.
+ */
+function locateThreeByFour(room, map) {
+    let areas = [];
+
+    for (let y = 1; y < 46; y++) {
+        for (let x = 1; x < 45; x++) {
+            if (map[y+0][x] === 0 && map[y+0][x+1] === 0 && map[y+0][x+2] === 0 &&
+                map[y+1][x] === 0 && map[y+1][x+1] === 0 && map[y+1][x+2] === 0 &&
+                map[y+2][x] === 0 && map[y+2][x+1] === 0 && map[y+2][x+2] === 0 &&
+                map[y+3][x] === 0 && map[y+3][x+1] === 0 && map[y+3][x+2] === 0) {
+
+                let boundary = BoundingBox.fromCoordinates({ x: x, y: y }, { x: x + 2, y: y + 3 })
                 areas.push(new models.ExtensionSiteCandidate(room, boundary));
             }
         }
