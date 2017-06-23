@@ -21,7 +21,25 @@ function ExtensionSiteCandidate(room, boundingBox) {
      */
     this.getCenter = function () {
         return this.boundingBox.getCenter();
-    }
+    };
+
+    /**
+     * Determines where to build within this site candidate.
+     *
+     * @return {object[]}   Array of objects, where each object consists of an X and Y that specify a location
+     *                      within the room to build an extension.
+     */
+    this.getBuildLocations = function () {
+        let locations = [];
+
+        for (let x = this.boundingBox.topLeft.x + 1; x < this.boundingBox.bottomRight.x; x++) {
+            for (let y = this.boundingBox.topLeft.y + 1; y < this.boundingBox.bottomRight.y; y++) {
+                locations.push({ x: x, y: y });
+            }
+        }
+
+        return locations;
+    };
 
     /**
      * Calculates the number of extensions that can be supported by this site. The calculated depends on the
@@ -34,8 +52,11 @@ function ExtensionSiteCandidate(room, boundingBox) {
         if (this.boundingBox.getWidth() === 3 && this.boundingBox.getHeight() === 3) {
             // A 3x3 grid can fit a single extension in the center.
             return 1;
+        } else if (this.boundingBox.getWidth() === 3 && this.boundingBox.getHeight() === 4) {
+            // A 3x4 grid can fit two extensions.
+            return 2;
         } else {
-            console.error('An oddly shaped candidated was created for extensions.');
+            console.log(`An oddly shaped candidated was created for extensions. Dimensions: ${this.boundingBox}.`);
             return 0;
         }
     };
@@ -66,7 +87,7 @@ function ExtensionSiteCandidate(room, boundingBox) {
             });
 
         if (numOfSpawns === 0) {
-            console.error('You are trying to place extensions in a room with no spawns. Why?');
+            console.log('You are trying to place extensions in a room with no spawns. Why?');
             return 0;
         }
 
