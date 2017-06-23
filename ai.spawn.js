@@ -27,7 +27,7 @@ function cleanUpDeadCreeps() {
 function spawnPeasantIfNeeded(spawn) {
     let peasants = spawn.room.find(FIND_MY_CREEPS).filter(creep => creep.memory.role === 'peasant');
 
-    if (peasants.length < 25) {
+    if (peasants.length < 20) {
         spawnPeasant(spawn, peasants);
         return;
     }
