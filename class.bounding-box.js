@@ -58,8 +58,8 @@ function BoundingBox(center, radius) {
     this.getLocations = function () {
         let locations = [];
 
-        for (let x = this.topLeft.x; x < this.bottomRight.x; x++) {
-            for (let y = this.topLeft.y; y < this.bottomRight.y; y++){
+        for (let x = this.topLeft.x; x <= this.bottomRight.x; x++) {
+            for (let y = this.topLeft.y; y <= this.bottomRight.y; y++){
                 locations.push({ x: x, y: y });
             }
         }

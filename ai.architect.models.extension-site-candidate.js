@@ -42,6 +42,13 @@ function ExtensionSiteCandidate(room, boundingBox) {
     };
 
     /**
+     * Accesses the width of this candidate's boundary.
+     */
+    this.getHeight = function () {
+        return this.boundingBox.getHeight();
+    }
+
+    /**
      * Calculates the number of extensions that can be supported by this site. The calculated depends on the
      * size of the site.
      *
@@ -49,16 +56,11 @@ function ExtensionSiteCandidate(room, boundingBox) {
      *                      room to maneuver. Never less than zero.
      */
     this.getNumberOfExtensionsAllowed = function () {
-        if (this.boundingBox.getWidth() === 3 && this.boundingBox.getHeight() === 3) {
-            // A 3x3 grid can fit a single extension in the center.
-            return 1;
-        } else if (this.boundingBox.getWidth() === 3 && this.boundingBox.getHeight() === 4) {
-            // A 3x4 grid can fit two extensions.
-            return 2;
-        } else {
-            console.log(`An oddly shaped candidated was created for extensions. Dimensions: ${this.boundingBox}.`);
+        if (this.getWidth() < 3 || this.getHeight() < 3) {
             return 0;
         }
+
+        return (this.getWidth() - 2) * (this.getHeight() - 2);
     };
 
     /**
@@ -67,6 +69,13 @@ function ExtensionSiteCandidate(room, boundingBox) {
     this.getScore = function () {
         return this.getNumberOfExtensionsAllowed() * extensionScoreValue - getAverageDistanceToSpawns();
     };
+
+    /**
+     * Accesses the width of this candidate's boundary.
+     */
+    this.getWidth = function () {
+        return this.boundingBox.getWidth();
+    }
 
     /**
      * Calculates the average distance from this site candidate to the spawns in this room.
