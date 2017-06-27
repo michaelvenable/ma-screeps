@@ -56,6 +56,33 @@ function establishRoadConstructionSite(room, location) {
     }
 }
 
+/**
+ * Determines if a tile contains an obstacle that cannot be built upon.
+ *
+ * @param objects {RoomObject[]}    Objects to be checked.
+ *
+ * @return {boolean}    true if the location has a wall, structure, construction site, or an energy source.
+ */
+function isObstacle(objects) {
+    return isWall(objects) || hasStructure(objects) || hasConstructionSite(objects) || hasSource(objects);
+}
+
+function isWall(objects) {
+    return objects.findIndex(o => o.type === 'terrain' && o.terrain === 'wall') !== -1;
+}
+
+function hasConstructionSite(objects) {
+    return objects.findIndex(o => o.type === 'constructionSite') !== -1;
+}
+
+function hasStructure(objects) {
+    return objects.findIndex(o => o.type === 'structure') !== -1;
+}
+
+function hasSource(objects) {
+    return objects.findIndex(o => o.type === 'source') !== -1;
+}
+
 function isSomethingHere(room, location) {
     return room.lookAt(location.x, location.y).length > 1;
 }
@@ -75,6 +102,7 @@ module.exports = {
     doesAreaContainStructure: doesAreaContainStructure,
     establishRoad: establishRoad,
     establishRoadConstructionSite: establishRoadConstructionSite,
+    isObstacle: isObstacle,
     isSomethingHere: isSomethingHere,
     placeTower: placeTower
 };
