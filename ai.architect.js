@@ -19,7 +19,8 @@ function run() {
         strategies.buildRoadFromSpawnToEnergy,
         strategies.buildRoadFromEnergyToController,
         strategies.buildTowersNearSpawns,
-        strategies.buildTowersNearControllers
+        strategies.buildTowersNearControllers,
+        strategies.buildLinksNearEnergySources,
     ];
 
     for (let spawnName in Game.spawns) {

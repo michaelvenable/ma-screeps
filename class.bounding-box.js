@@ -25,6 +25,37 @@ function BoundingBox(center, radius) {
     };
 
     /**
+     * Retrieves the boundary tils of this bounding box.
+     *
+     * @return {object[]}   Array of X,Y locations.
+     */
+    this.getBoundary = function () {
+        let boundary = [];
+
+        // Add the top row.
+        for (let x = this.topLeft.x; x <= this.bottomRight.x; x++) {
+            boundary.push({x: x, y: this.topLeft.y});
+        }
+
+        // Add the bottom row.
+        for (let x = this.topLeft.x; x <= this.bottomRight.x; x++) {
+            boundary.push({x: x, y: this.bottomRight.y});
+        }
+
+        // Add the left side.
+        for (let y = this.topLeft.y + 1; y < this.bottomRight.y; y++) {
+            boundary.push({x: this.topLeft.x, y: y});
+        }
+
+        // Add the right side.
+        for (let y = this.topLeft.y + 1; y < this.bottomRight.y; y++) {
+            boundary.push({x: this.bottomRight.x, y: y});
+        }
+
+        return boundary;
+    };
+
+    /**
      * Calculates the center of this bounding box.
      *
      * @return {object} Object with X, Y values.
