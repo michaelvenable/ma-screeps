@@ -16,6 +16,14 @@ function BoundingBox(center, radius) {
         y: center.y - radius
     };
 
+    if (this.topLeft.x < 0) {
+        this.topLeft.x = 0;
+    }
+
+    if (this.topLeft.y < 0) {
+        this.topLeft.y = 0;
+    }
+
     /**
      * The bottom-right corner of the bounding box.
      */
@@ -23,6 +31,14 @@ function BoundingBox(center, radius) {
         x: center.x + radius,
         y: center.y + radius
     };
+
+    if (this.bottomRight.x > 50) {
+        this.bottomRight.x = 50;
+    }
+
+    if (this.bottomRight.y > 50) {
+        this.bottomRight.y = 50;
+    }
 
     /**
      * Retrieves the boundary tils of this bounding box.
