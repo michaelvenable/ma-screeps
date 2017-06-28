@@ -1,3 +1,6 @@
+let BoundingBox = require('class.bounding-box');
+let models = require('ai.architect.models');
+
 /**
  * Determines if an area contains a particular type of structure or if a construction site has been placed for
  * a particular type of struction in the area.
@@ -98,11 +101,97 @@ function placeTower(room, x, y) {
     }
 }
 
+/**
+ * Locates areas within a room that are free from obstacles.
+ *
+ * @param room {Room}           The room being searched.
+ * @param area {BoundingBox}    Defines the area within the room that will be searched for clear areas.
+ * @param width {number}        Desired width of the clear area.
+ * @param height {number}       Desired height of the clear area.
+ *
+ * @return {ExtensionSiteCandidate[]}   An array of bounding boxes that define the clear areas that were found. Each
+ *                                      bounding will be exactly width x height in size, will be complete contained
+ *                                      within the bounding box specified by the "area" parameter, and will have no
+ *                                      obstacles within it.
+ */
+function locateClearAreas(room, area, width, height) {
+    let obstacleMap = buildObstacleMap(room, area);
+
+    let candidates = [];
+
+    for (let topLeftY = area.topLeft.y; topLeftY <= area.bottomRight.y - height; topLeftY++) {
+        for (let topLeftX = area.topLeft.x; topLeftX < area.bottomRight.x - width; topLeftX++) {
+
+            let areaIsClear = true;
+
+            let boundary = BoundingBox.fromCoordinates(
+                { x: topLeftX, y: topLeftY },
+                { x: topLeftX + width - 1, y: topLeftY + height - 1 }
+            );
+
+            boundary.getLocations().forEach(location => {
+                areaIsClear = areaIsClear && (obstacleMap[location.y][location.x] === 0);
+            });
+
+            if (areaIsClear) {
+                candidates.push(new models.ExtensionSiteCandidate(room, boundary));
+            }
+        }
+    }
+
+    return candidates;
+}
+
+/**
+ * Maps the room's terrain into a two-dimensional array.
+ *
+ * @param room {Room}   The room that will be mapped.
+ *
+ * @return {number[][]} A 50x50 array that represents the room's contents, where the elment in the array at
+ *                      [y][x] specifies whether the room location is an obstacle (represented in the array
+ *                      as a one) or not an obstacle (represented as a zero).
+ */
+function buildObstacleMap(room, area) {
+    let map = {};
+
+    for (let y = area.topLeft.y; y <= area.bottomRight.y; y++) {
+        map[y] = {};
+
+        for (let x = area.topLeft.x; x <= area.bottomRight.x; x++) {
+            let objects = room.lookAt(x, y);
+            map[y][x] = isObstacle(objects) ? 1 : 0;
+        }
+    }
+
+    return map;
+}
+
+function isObstacle(objects) {
+    return isWall(objects) || hasStructure(objects) || hasConstructionSite(objects) || hasSource(objects);
+}
+
+function isWall(objects) {
+    return objects.findIndex(o => o.type === 'terrain' && o.terrain === 'wall') !== -1;
+}
+
+function hasConstructionSite(objects) {
+    return objects.findIndex(o => o.type === 'constructionSite') !== -1;
+}
+
+function hasStructure(objects) {
+    return objects.findIndex(o => o.type === 'structure') !== -1;
+}
+
+function hasSource(objects) {
+    return objects.findIndex(o => o.type === 'source') !== -1;
+}
+
 module.exports = {
     doesAreaContainStructure: doesAreaContainStructure,
     establishRoad: establishRoad,
     establishRoadConstructionSite: establishRoadConstructionSite,
     isObstacle: isObstacle,
     isSomethingHere: isSomethingHere,
+    locateClearAreas: locateClearAreas,
     placeTower: placeTower
 };
