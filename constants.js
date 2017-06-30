@@ -39,14 +39,21 @@ for (let className in builds) {
     }
 }
 
-let visuals = {
-    path: { visualizePathStyle: { stroke: '#FFFFFF' } }
-};
+/**
+ * Height of each room in tiles.
+ */
+let roomHeight = 50;
+
+/**
+ * Width of each room in tiles.
+ */
+let roomWidth = 50;
 
 module.exports = {
     actions: actions,
     builds: builds,
     buildCosts: buildCosts,
     roles: roles,
-    visuals: visuals
+    roomHeight: roomHeight,
+    roomWidth: roomWidth
 };
