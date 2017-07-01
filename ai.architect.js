@@ -17,7 +17,7 @@ function run() {
 
     let employedStrategies = [
         strategies.buildRoadsFromSpawnToEnergy,
-        // strategies.buildRoadFromEnergyToController,
+        strategies.buildRoadsFromEnergyToController,
         // strategies.buildTowersNearSpawns,
         // strategies.buildTowersNearControllers,
         // strategies.buildLinksNearEnergySources,
@@ -35,7 +35,8 @@ function run() {
 
         mapping.structureMap.print(map);
 
-        Memory.structureMap = map;
+        Memory.buildLists = Memory.buildList || {};
+        Memory.buildLists[name] = buildList;
     }
 }
 
