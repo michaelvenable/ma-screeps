@@ -32,12 +32,12 @@ function BoundingBox(center, radius) {
         y: center.y + radius
     };
 
-    if (this.bottomRight.x > 50) {
-        this.bottomRight.x = 50;
+    if (this.bottomRight.x > 49) {
+        this.bottomRight.x = 49;
     }
 
-    if (this.bottomRight.y > 50) {
-        this.bottomRight.y = 50;
+    if (this.bottomRight.y > 49) {
+        this.bottomRight.y = 49;
     }
 
     /**
