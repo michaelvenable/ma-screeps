@@ -21,7 +21,7 @@ function run() {
         strategies.buildTowersNearSpawns,
         strategies.buildTowersNearControllers,
         strategies.buildLinksNearEnergySources,
-        // strategies.buildLinksNearSpawns,
+        strategies.buildLinksNearSpawns,
         // strategies.buildExtensions
     ];
 

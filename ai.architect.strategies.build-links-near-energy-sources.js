@@ -14,7 +14,6 @@ function run(room, structureMap, buildList) {
     room.find(FIND_SOURCES)
         .forEach(source => {
             let surroundingArea = new BoundingBox(source.pos, 6);
-            console.log(surroundingArea);
 
             if (mappingHelpers.doesAreaContainStructure(structureMap, surroundingArea, [STRUCTURE_LINK])) {
                 return;

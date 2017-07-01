@@ -1,22 +1,13 @@
-let architectHelpers = require('ai.architect.helpers');
 let BoundingBox = require('class.bounding-box');
 let helpers = require('helpers');
-let models = require('ai.architect.models');
+let mappingHelpers = require('mapping.helpers');
 
 /**
  * Places construction sites for links near spawns.
  */
-function run(room) {
+function run(room, structureMap, buildList) {
     // make sure we control this room.
     if (room.controller === undefined || !room.controller.my) {
-        return;
-    }
-
-    // Make sure we are high enough level before doing anything.
-    let numOfLinks = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_LINK }}).length;
-    let allowedNumberOfLinks = CONTROLLER_STRUCTURES.link[room.controller.level];
-
-    if (numOfLinks >= allowedNumberOfLinks) {
         return;
     }
 
@@ -24,25 +15,24 @@ function run(room) {
         .forEach(spawn => {
             let surroundingArea = new BoundingBox(spawn.pos, 15);
 
-            if (architectHelpers.doesAreaContainStructure(room, surroundingArea, STRUCTURE_LINK)) {
+            if (mappingHelpers.doesAreaContainStructure(structureMap, surroundingArea, [STRUCTURE_LINK])) {
                 return;
             }
 
-            let clearAreasNearSpawn = architectHelpers.locateClearAreas(room, surroundingArea, 3, 3);
+            let candidates = mappingHelpers.locateClearAreas(room, structureMap, surroundingArea, 3, 3);
 
-            if (clearAreasNearSpawn.length > 0) {
-                let areasByPriority = clearAreasNearSpawn.sort(models.ExtensionSiteCandidate.compareFunction);
+            if (candidates.length > 0) {
+                let location = candidates[0].getCenter();
+                structureMap[location.y][location.x] = {
+                    type: STRUCTURE_LINK,
+                    state: 'planned'
+                };
 
-                let location = areasByPriority[0].boundingBox.getCenter(); 
-                let result = room.createConstructionSite(location.x, location.y, STRUCTURE_LINK);
-                if (result !== OK) {
-                    console.log(`Failed to build link at ${location.x}, ${location.y}.`);
-                }
+                buildList.push({
+                    type: STRUCTURE_LINK,
+                    pos: location
+                });
             }
-        });
-
-    room.find(FIND_SOURCES)
-        .forEach(source => {
         });
 }
 
