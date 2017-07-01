@@ -1,15 +1,12 @@
 let BoundingBox = require('class.bounding-box');
 let helpers = require('helpers');
-
-let architect = {
-    helpers: require('ai.architect.helpers')
-};
+let mappingHelpers = require('mapping.helpers');
 
 /**
  * Places a tower near each controller. The chosen location is a random location with 6 squares of a spawn.
  * Each spawn will only receive one tower.
  */
-function run(room) {
+function run(room, structureMap, buildList) {
     let controller = room.controller;
 
     if (controller === undefined || !controller.my) {
@@ -19,15 +16,24 @@ function run(room) {
     let radius = 6;
     let boundingBox = new BoundingBox(controller.pos, radius);
 
-    if (architect.helpers.doesAreaContainStructure(controller.room, boundingBox, [STRUCTURE_TOWER])) {
+    if (mappingHelpers.doesAreaContainStructure(structureMap, boundingBox, [STRUCTURE_TOWER])) {
         return;
     }
 
-    let locations = boundingBox.getLocations()
-        .filter(location => room.lookAt(location.x, location.y).length < 2);
+    let candidates = mappingHelpers.locateClearAreas(room, structureMap, boundingBox, 3, 3);
 
-    let location = helpers.pickRandomElement(locations);
-    architect.helpers.placeTower(room, location.x, location.y);
+    if (candidates.length > 0) {
+        let location = candidates[0].getCenter();
+        structureMap[location.y][location.x] = {
+            type: STRUCTURE_TOWER,
+            state: 'planned'
+        };
+
+        buildList.push({
+            type: STRUCTURE_TOWER,
+            pos: location
+        });
+    }
 }
 
 module.exports = {

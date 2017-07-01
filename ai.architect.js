@@ -19,7 +19,7 @@ function run() {
         strategies.buildRoadsFromSpawnToEnergy,
         strategies.buildRoadsFromEnergyToController,
         strategies.buildTowersNearSpawns,
-        // strategies.buildTowersNearControllers,
+        strategies.buildTowersNearControllers,
         // strategies.buildLinksNearEnergySources,
         // strategies.buildLinksNearSpawns,
         // strategies.buildExtensions
