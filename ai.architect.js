@@ -18,7 +18,7 @@ function run() {
     let employedStrategies = [
         strategies.buildRoadsFromSpawnToEnergy,
         strategies.buildRoadsFromEnergyToController,
-        // strategies.buildTowersNearSpawns,
+        strategies.buildTowersNearSpawns,
         // strategies.buildTowersNearControllers,
         // strategies.buildLinksNearEnergySources,
         // strategies.buildLinksNearSpawns,

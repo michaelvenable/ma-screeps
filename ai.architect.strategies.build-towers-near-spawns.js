@@ -1,9 +1,6 @@
 let BoundingBox = require('class.bounding-box');
 let helpers = require('helpers');
-
-let architect = {
-    helpers: require('ai.architect.helpers')
-};
+let mappingHelpers = require('mapping.helpers');
 
 /**
  * Builds a tower next to each spawn site. The tower is placed at a randomly chosen location near each spawn
@@ -11,25 +8,31 @@ let architect = {
  *
  * @param run {Room}    The room containing the spawn point.
  */
-function run(room) {
+function run(room, structureMap, buildList) {
     let spawns = room.find(FIND_MY_SPAWNS);
 
     spawns.forEach(spawn => {
-        let radius = 6;
-        let boundingBox = new BoundingBox(spawn.pos, radius);
+       let radius = 6;
+       let boundingBox = new BoundingBox(spawn.pos, radius);
 
-        if (architect.helpers.doesAreaContainStructure(room, boundingBox, [STRUCTURE_TOWER])) {
+        if (mappingHelpers.doesAreaContainStructure(structureMap, boundingBox, [STRUCTURE_TOWER])) {
             return;
         }
 
-        let minimumDistance = 4;
+        let candidates = mappingHelpers.locateClearAreas(room, structureMap, boundingBox, 3, 3);
 
-        let locations = boundingBox.getLocations()
-            .filter(location => helpers.distance(spawn.pos, location) >= minimumDistance)
-            .filter(location => room.lookAt(location.x, location.y).length < 2);
+        if (candidates.length > 0) {
+            let location = candidates[0].getCenter();
+            structureMap[location.y][location.x] = {
+                type: STRUCTURE_TOWER,
+                state: 'planned'
+            };
 
-        let location = helpers.pickRandomElement(locations);
-        architect.helpers.placeTower(room, location.x, location.y);
+            buildList.push({
+                type: STRUCTURE_TOWER,
+                pos: location
+            });
+        }
     });
 }
 
