@@ -22,7 +22,7 @@ function createFromRoom(room) {
             let structure = objects.find(o => o.type === 'structure');
             if (structure !== undefined) {
                 map[y].push({
-                    type: structure.type,
+                    type: structure.structure.structureType,
                     state: 'built'
                 });
                 continue;
@@ -32,11 +32,18 @@ function createFromRoom(room) {
             if (constructionSite !== undefined) {
                 map[y].push({
                     type: constructionSite.structureType,
-                    state: 'under-construction'
+                    state: 'planned'
                 });
                 continue;
             }
 
+            let source = objects.find(o => o.type === 'source');
+            if (source !== undefined) {
+                map[y].push({
+                    type: 'source'
+                });
+                continue;
+            }
             let wall = objects.find(o => o.type === 'terrain');
             if (wall !== undefined && wall.terrain === 'wall') {
                 map[y].push({
@@ -45,6 +52,7 @@ function createFromRoom(room) {
                 });
                 continue;
             }
+
 
             map[y].push(0);
         }
@@ -60,7 +68,7 @@ function createFromRoom(room) {
  */
 function print(map) {
     for (let y = 0; y < constants.roomHeight; y++) {
-        let row = '| ';
+        let row = '';
 
         for (let x = 0; x < constants.roomWidth; x++) {
             let symbol;
@@ -70,15 +78,15 @@ function print(map) {
             } else if (map[y][x].type === STRUCTURE_WALL) {
                 symbol = '\u25A0';
             } else if (map[y][x].type === STRUCTURE_SPAWN) {
-                symbol = '\u047A';
+                symbol = '\u2654';
             } else if (map[y][x].type === STRUCTURE_EXTENSION) {
                 symbol = '\u0489';
             } else if (map[y][x].type === STRUCTURE_ROAD) {
-                symbol = '\u0A02';
+                symbol = '\u25A2';
             } else if (map[y][x].type === STRUCTURE_RAMPART) {
                 symbol = '\u25A1';
             } else if (map[y][x].type === STRUCTURE_CONTROLLER) {
-                symbol = '\u06E9';
+                symbol = '\u2690';
             } else if (map[y][x].type === STRUCTURE_LINK) {
                 symbol = '\u2666';
             } else if (map[y][x].type === STRUCTURE_STORAGE) {
@@ -87,14 +95,14 @@ function print(map) {
                 symbol = '\u265C';
             } else if (map[y][x].type === STRUCTURE_CONTAINER) {
                 symbol = '\u20E3';
+            } else if (map[y][x].type === 'source') {
+                symbol = '\u2600';
             } else {
-                symbol = '\u26C6';
+                symbol = '?';
             }
 
             row += symbol + ' ';
         }
-
-        row += '|';
 
         console.log(row);
     }

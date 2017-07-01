@@ -11,14 +11,16 @@ let DeliverEnergyToConstructionSites = require('coordinator.deliver-energy-to-co
 let AssignWaitingPeasantsToUpgradeController = require('coordinator.assign-waiting-peasants-to-upgrade-controller');
 let DeliverEnergyToTowers = require('coordinator.deliver-energy-to-towers');
 
+let mapping = require('mapping');
+
 module.exports.loop = function () {
     console.log(`================== (Tick: ${Game.time}) ==================`);
 
-    for (let spawnName in Game.spawns) {
-        let spawn = Game.spawns[spawnName];
+    for (let name in Game.rooms) {
+        let room = Game.rooms[name];
 
-        let peasants = spawn.room.find(FIND_MY_CREEPS).filter(c => c.memory.role === 'peasant');
-        console.log(`Peasants (${spawn.room.name}): ${peasants.length}`);
+        let peasants = room.find(FIND_MY_CREEPS).filter(c => c.memory.role === 'peasant');
+        console.log(`Peasants (${room.name}): ${peasants.length}`);
     }
 
     ai.architect.run();

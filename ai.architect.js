@@ -1,4 +1,5 @@
 let strategies = require('ai.architect.strategies');
+let mapping = require('mapping');
 
 /**
  * Decides where structures will be placed.
@@ -9,24 +10,32 @@ function run() {
     }
 
     if (Game.time < (Memory.lastBuildTime + 100)) {
-        return;
+        // return;
     }
 
     Memory.lastBuildTime = Game.time;
 
     let employedStrategies = [
-        strategies.buildExtensions,
-        strategies.buildRoadFromSpawnToEnergy,
-        strategies.buildRoadFromEnergyToController,
-        strategies.buildTowersNearSpawns,
-        strategies.buildTowersNearControllers,
-        strategies.buildLinksNearEnergySources,
-        strategies.buildLinksNearSpawns
+        strategies.buildRoadsFromSpawnToEnergy,
+        // strategies.buildRoadFromEnergyToController,
+        // strategies.buildTowersNearSpawns,
+        // strategies.buildTowersNearControllers,
+        // strategies.buildLinksNearEnergySources,
+        // strategies.buildLinksNearSpawns,
+        // strategies.buildExtensions
     ];
 
-    for (let spawnName in Game.spawns) {
-        let spawn = Game.spawns[spawnName];
-        employedStrategies.forEach(strategy => strategy.run(spawn.room));
+    for (let name in Game.rooms) {
+        let room = Game.rooms[name];
+
+        let map = mapping.structureMap.createFromRoom(room);
+        let buildList = [];
+
+        employedStrategies.forEach(strategy => strategy.run(room, map, buildList));
+
+        mapping.structureMap.print(map);
+
+        Memory.structureMap = map;
     }
 }
 
