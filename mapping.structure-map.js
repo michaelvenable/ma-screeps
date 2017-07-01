@@ -82,7 +82,7 @@ function print(map) {
             } else if (map[y][x].type === STRUCTURE_EXTENSION) {
                 symbol = '\u0489';
             } else if (map[y][x].type === STRUCTURE_ROAD) {
-                symbol = '\u25A2';
+                symbol = '\u25FB';
             } else if (map[y][x].type === STRUCTURE_RAMPART) {
                 symbol = '\u25A1';
             } else if (map[y][x].type === STRUCTURE_CONTROLLER) {

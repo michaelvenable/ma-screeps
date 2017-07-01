@@ -22,7 +22,7 @@ function run() {
         strategies.buildTowersNearControllers,
         strategies.buildLinksNearEnergySources,
         strategies.buildLinksNearSpawns,
-        // strategies.buildExtensions
+        strategies.buildExtensions
     ];
 
     for (let name in Game.rooms) {

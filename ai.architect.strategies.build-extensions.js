@@ -1,6 +1,6 @@
 let BoundingBox = require('class.bounding-box');
-let helpers = require('ai.architect.helpers');
 let models = require('ai.architect.models');
+let mappingHelpers = require('mapping.helpers');
 
 /**
  * Places construction sites for energy extensions in a room. Attempts to find large areas of empty land in
@@ -8,41 +8,58 @@ let models = require('ai.architect.models');
  *
  * @param room {Room}   The room where structures will be placed.
  */
-function run(room) {
-    let map = buildMap(room);
+function run(room, structureMap, buildList) {
+//     let map = buildMap(room);
 
-    let candidates = [];
 
-    locateCandidates(room, map, 3, 3).forEach(c => candidates.push(c));
+    let area = BoundingBox.fromCoordinates({ x: 0, y: 0 }, { x: 49, y: 49 });
 
-    locateCandidates(room, map, 3, 4).forEach(c => candidates.push(c));
-    locateCandidates(room, map, 3, 5).forEach(c => candidates.push(c));
-    locateCandidates(room, map, 3, 6).forEach(c => candidates.push(c));
+    let numExtensions = 0;
 
-    locateCandidates(room, map, 4, 3).forEach(c => candidates.push(c));
-    locateCandidates(room, map, 5, 3).forEach(c => candidates.push(c));
-    locateCandidates(room, map, 6, 3).forEach(c => candidates.push(c));
+    while (numExtensions < 60) {
+        let candidates = [];
 
-    locateCandidates(room, map, 4, 4).forEach(c => candidates.push(c));
+        mappingHelpers.locateClearAreas(room, structureMap, area, 3, 3).forEach(c => candidates.push(c));
 
-    locateCandidates(room, map, 4, 5).forEach(c => candidates.push(c));
-    locateCandidates(room, map, 4, 6).forEach(c => candidates.push(c));
+        mappingHelpers.locateClearAreas(room, structureMap, area, 3, 4).forEach(c => candidates.push(c));
+        mappingHelpers.locateClearAreas(room, structureMap, area, 3, 5).forEach(c => candidates.push(c));
+        mappingHelpers.locateClearAreas(room, structureMap, area, 3, 6).forEach(c => candidates.push(c));
 
-    locateCandidates(room, map, 5, 4).forEach(c => candidates.push(c));
-    locateCandidates(room, map, 6, 4).forEach(c => candidates.push(c));
+        mappingHelpers.locateClearAreas(room, structureMap, area, 4, 3).forEach(c => candidates.push(c));
+        mappingHelpers.locateClearAreas(room, structureMap, area, 5, 3).forEach(c => candidates.push(c));
+        mappingHelpers.locateClearAreas(room, structureMap, area, 6, 3).forEach(c => candidates.push(c));
 
-    if (candidates.length > 0) {
+        mappingHelpers.locateClearAreas(room, structureMap, area, 4, 4).forEach(c => candidates.push(c));
+
+        mappingHelpers.locateClearAreas(room, structureMap, area, 4, 5).forEach(c => candidates.push(c));
+        mappingHelpers.locateClearAreas(room, structureMap, area, 4, 6).forEach(c => candidates.push(c));
+
+        mappingHelpers.locateClearAreas(room, structureMap, area, 5, 4).forEach(c => candidates.push(c));
+        mappingHelpers.locateClearAreas(room, structureMap, area, 6, 4).forEach(c => candidates.push(c));
+
         let areas = candidates.sort(models.ExtensionSiteCandidate.compareFunction);
 
-        let locations = areas[0].getBuildLocations();
-        locations.forEach(location => {
-            console.log(`Building extension at ${location.x}, ${location.y}.`);
+        if (areas.length > 0) {
+            let locations = areas[0].getBuildLocations();
 
-            let result = room.createConstructionSite(location.x, location.y, STRUCTURE_EXTENSION);
-            if (result !== OK) {
-                console.log(`Failed to build extension: ${result}`);
-            }
-        });
+            locations.forEach(location => {
+                if (numExtensions >= 60) {
+                    return;
+                }
+
+                structureMap[location.y][location.x] = {
+                    type: STRUCTURE_EXTENSION,
+                    state: 'planned'
+                };
+
+                buildList.push({
+                    type: STRUCTURE_EXTENSION,
+                    pos: location
+                });
+
+                numExtensions++;
+            });
+        }
     }
 }
 
