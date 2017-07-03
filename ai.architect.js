@@ -16,13 +16,13 @@ function run() {
     // Memory.lastBuildTime = Game.time;
 
     let employedStrategies = [
-        strategies.buildRoadsFromSpawnToEnergy,
-        strategies.buildRoadsFromEnergyToController,
-        strategies.buildTowersNearSpawns,
-        strategies.buildTowersNearControllers,
         strategies.buildLinksNearEnergySources,
         strategies.buildLinksNearSpawns,
-        strategies.buildExtensions
+        strategies.buildTowersNearSpawns,
+        strategies.buildTowersNearControllers,
+        strategies.buildExtensions,
+        strategies.buildRoadsFromSpawnToEnergy,
+        strategies.buildRoadsFromEnergyToController
     ];
 
     for (let name in Game.rooms) {
@@ -30,7 +30,7 @@ function run() {
 
         // Skip if we've already created a build list for this room.
         if (Memory.buildLists !== undefined && Memory.buildLists[name] !== undefined) {
-            continue;
+           continue;
         }
 
         let map = mapping.structureMap.createFromRoom(room);

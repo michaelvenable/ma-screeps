@@ -9,9 +9,6 @@ let mappingHelpers = require('mapping.helpers');
  * @param room {Room}   The room where structures will be placed.
  */
 function run(room, structureMap, buildList) {
-//     let map = buildMap(room);
-
-
     let area = BoundingBox.fromCoordinates({ x: 0, y: 0 }, { x: 49, y: 49 });
 
     let numExtensions = 0;

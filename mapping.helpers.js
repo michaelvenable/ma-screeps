@@ -1,5 +1,6 @@
-let BoundingBox = require('class.bounding-box');
 let models = require('ai.architect.models');
+let BoundingBox = require('class.bounding-box');
+let constants = require('constants');
 
 function doesAreaContainStructure(structureMap, boundingBox, structureTypes) {
     for (let y = boundingBox.topLeft.y; y <= boundingBox.bottomRight.y; y++) {
@@ -11,6 +12,30 @@ function doesAreaContainStructure(structureMap, boundingBox, structureTypes) {
     }
 
     return false;
+}
+
+/**
+ * Searches a structure map for tiles of a particular type.
+ *
+ * @param structureMap {object[][]}     Structure map that will be searched. Created using
+ *                                      StructureMap.createFromRoom.
+ * @param includeFn {function}          Determines whether a tile should be included in the result.
+ *
+ *
+ * @return {object[]}   Array containing the locations of matching tiles.
+ */
+function find(structureMap, includeFn) {
+    let matches = [];
+
+    for (let y = 0; y < constants.roomHeight; y++) {
+        for (let x = 0; x < constants.roomWidth; x++) {
+            if (includeFn(structureMap[y][x])) {
+                matches.push({ x: x, y: y });
+            }
+        }
+    }
+
+    return matches;
 }
 
 function isObstacle(object) {
@@ -71,6 +96,7 @@ function compare(a, b) {
 
 module.exports = {
     doesAreaContainStructure: doesAreaContainStructure,
+    find: find,
     isObstacle: isObstacle,
     locateClearAreas: locateClearAreas
 };
