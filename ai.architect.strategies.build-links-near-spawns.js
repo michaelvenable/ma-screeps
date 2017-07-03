@@ -13,7 +13,7 @@ function run(room, structureMap, buildList) {
 
     room.find(FIND_MY_SPAWNS)
         .forEach(spawn => {
-            let surroundingArea = new BoundingBox(spawn.pos, 15);
+            let surroundingArea = new BoundingBox(spawn.pos, 7);
 
             if (mappingHelpers.doesAreaContainStructure(structureMap, surroundingArea, [STRUCTURE_LINK])) {
                 return;
