@@ -27,9 +27,9 @@ function run() {
         { at: 5, fn: strategies.buildLinksNearSpawns },
         { at: 10, fn: strategies.buildTowersNearSpawns },
         { at: 15, fn: strategies.buildTowersNearControllers },
-        { at: 20, fn: strategies.buildExtensions },
-        { at: 40, fn: strategies.buildRoadsFromSpawnToEnergy },
-        { at: 80, fn: strategies.buildRoadsFromEnergyToController }
+        { at: 45, fn: strategies.buildExtensions },
+        { at: 75, fn: strategies.buildRoadsFromSpawnToEnergy },
+        { at: 100, fn: strategies.buildRoadsFromEnergyToController }
     ];
 
     for (let name in Game.rooms) {
