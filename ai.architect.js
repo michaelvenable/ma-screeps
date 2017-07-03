@@ -5,15 +5,15 @@ let mapping = require('mapping');
  * Decides where structures will be placed.
  */
 function run() {
-    if (Memory.lastBuildTime === undefined) {
-        Memory.lastBuildTime = Game.time;
-    }
+    // if (Memory.lastBuildTime === undefined) {
+    //     Memory.lastBuildTime = Game.time;
+    // }
 
-    if (Game.time < (Memory.lastBuildTime + 100)) {
+    // if (Game.time < (Memory.lastBuildTime + 100)) {
         // return;
-    }
+    // }
 
-    Memory.lastBuildTime = Game.time;
+    // Memory.lastBuildTime = Game.time;
 
     let employedStrategies = [
         strategies.buildRoadsFromSpawnToEnergy,
@@ -27,6 +27,11 @@ function run() {
 
     for (let name in Game.rooms) {
         let room = Game.rooms[name];
+
+        // Skip if we've already created a build list for this room.
+        if (Memory.buildLists !== undefined && Memory.buildLists[name] !== undefined) {
+            continue;
+        }
 
         let map = mapping.structureMap.createFromRoom(room);
         let buildList = [];
