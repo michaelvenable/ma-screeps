@@ -1,6 +1,6 @@
 function DeliverEnergyToTowers(room) {
     this.assignJobs = function (peasants) {
-        room.find(FIND_MY_STRUCTURES, { structureType: STRUCTURE_TOWER })
+        room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER }})
             .forEach(tower => assignWorkersToTowerIfNeeded(tower, peasants));
     }
 
