@@ -132,6 +132,7 @@ function run() {
             if (taskFn !== undefined) {
                 let map = Memory.architect.maps[name];
                 let buildList = Memory.architect.buildLists[name] || [];
+                taskFn(room, map, buildList);
                 mapping.structureMap.print(Memory.architect.maps[name]);
 
                 Memory.architect.maps[name] = map;
