@@ -81,6 +81,10 @@ function rebuild(roomName) {
         .forEach(structure => structure.destroy());
 
     Memory.architect.worklist = undefined;
+    Memory.architect.maps = {};
+    Memory.architect.buildLists = {};
+
+    console.log("Room structures reset.");
 }
 
 /**
