@@ -17,13 +17,13 @@ function run(room, structureMap, buildList) {
 
     // mappingHelpers.locateClearAreas(room, structureMap, area, 3, 3).forEach(c => candidates.push(c));
 
-    mappingHelpers.locateClearAreas(room, structureMap, area, 3, 4).forEach(c => candidates.push(c));
-    mappingHelpers.locateClearAreas(room, structureMap, area, 3, 5).forEach(c => candidates.push(c));
-    mappingHelpers.locateClearAreas(room, structureMap, area, 3, 6).forEach(c => candidates.push(c));
+    // mappingHelpers.locateClearAreas(room, structureMap, area, 3, 4).forEach(c => candidates.push(c));
+    // mappingHelpers.locateClearAreas(room, structureMap, area, 3, 5).forEach(c => candidates.push(c));
+    // mappingHelpers.locateClearAreas(room, structureMap, area, 3, 6).forEach(c => candidates.push(c));
 
-    mappingHelpers.locateClearAreas(room, structureMap, area, 4, 3).forEach(c => candidates.push(c));
-    mappingHelpers.locateClearAreas(room, structureMap, area, 5, 3).forEach(c => candidates.push(c));
-    mappingHelpers.locateClearAreas(room, structureMap, area, 6, 3).forEach(c => candidates.push(c));
+    // mappingHelpers.locateClearAreas(room, structureMap, area, 4, 3).forEach(c => candidates.push(c));
+    // mappingHelpers.locateClearAreas(room, structureMap, area, 5, 3).forEach(c => candidates.push(c));
+    // mappingHelpers.locateClearAreas(room, structureMap, area, 6, 3).forEach(c => candidates.push(c));
 
     mappingHelpers.locateClearAreas(room, structureMap, area, 4, 4).forEach(c => candidates.push(c));
 
