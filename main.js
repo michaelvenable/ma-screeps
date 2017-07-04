@@ -16,11 +16,6 @@ let mapping = require('mapping');
 module.exports.loop = function () {
     console.log(`================== (Tick: ${Game.time}) ==================`);
 
-    if (Memory.rebuild !== undefined) {
-        rebuild(Memory.rebuild);
-        Memory.rebuild = undefined;
-    }
-
     for (let name in Game.rooms) {
         let room = Game.rooms[name];
 
@@ -60,31 +55,6 @@ module.exports.loop = function () {
             console.log(`${creep} has an unrecognized job.`);
         }
     }
-}
-
-function rebuild(roomName) {
-    let room = Game.rooms[roomName];
-    if (room === undefined) {
-        console.log(`No room with name ${roomName}.`);
-        return;
-    }
-
-    room.find(FIND_MY_STRUCTURES)
-        .filter(structure => [STRUCTURE_LINK, STRUCTURE_TOWER, STRUCTURE_EXTENSION].includes(structure.structureType))
-        .forEach(structure => structure.destroy());
-
-    room.find(FIND_MY_CONSTRUCTION_SITES)
-        .forEach(structure => structure.remove());
-
-    room.find(FIND_STRUCTURES)
-        .filter(structure => structure.structureType === STRUCTURE_ROAD)
-        .forEach(structure => structure.destroy());
-
-    Memory.architect.worklist = undefined;
-    Memory.architect.maps = {};
-    Memory.architect.buildLists = {};
-
-    console.log("Room structures reset.");
 }
 
 /**
