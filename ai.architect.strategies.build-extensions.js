@@ -15,7 +15,7 @@ function run(room, structureMap, buildList) {
 
     let candidates = [];
 
-    mappingHelpers.locateClearAreas(room, structureMap, area, 3, 3).forEach(c => candidates.push(c));
+    // mappingHelpers.locateClearAreas(room, structureMap, area, 3, 3).forEach(c => candidates.push(c));
 
     mappingHelpers.locateClearAreas(room, structureMap, area, 3, 4).forEach(c => candidates.push(c));
     mappingHelpers.locateClearAreas(room, structureMap, area, 3, 5).forEach(c => candidates.push(c));
