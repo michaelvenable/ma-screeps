@@ -5,81 +5,153 @@ let mapping = require('mapping');
  * Decides where structures will be placed.
  */
 function run() {
-    // if (Memory.lastBuildTime === undefined) {
-    //     Memory.lastBuildTime = Game.time;
-    // }
+    Memory.architect = Memory.architect || {
+        maps: {},
+        buildLists: {}
+    };
 
-    // if (Game.time < (Memory.lastBuildTime + 100)) {
-        // return;
-    // }
-
-    // Memory.lastBuildTime = Game.time;
-    //
-
-    Memory.architect = Memory.architect || {};
-
-    if (Memory.architect.startPlanTimestamp === undefined) {
-        Memory.architect.startPlanTimestamp = Game.time;
+    if (Memory.architect.worklist === undefined) {
+        Memory.architect.worklist = [
+            {
+                runAt: Game.time + 1,
+                action: 'create-maps'
+            }, {
+                runAt: Game.time + 2,
+                action: 'plan-links-near-energy-sources'
+            }, {
+                runAt: Game.time + 3,
+                action: 'plan-links-near-spawns'
+            }, {
+                runAt: Game.time + 4,
+                action: 'plan-towers-near-spawns'
+            }, {
+                runAt: Game.time + 5,
+                action: 'plan-towers-near-controllers'
+            }, {
+                runAt: Game.time + 8,
+                action: 'plan-extensions'
+            }, {
+                runAt: Game.time + 15,
+                action: 'plan-extensions'
+            }, {
+                runAt: Game.time + 20,
+                action: 'plan-extensions'
+            }, {
+                runAt: Game.time + 25,
+                action: 'plan-extensions'
+            }, {
+                runAt: Game.time + 30,
+                action: 'plan-extensions'
+            }, {
+                runAt: Game.time + 35,
+                action: 'plan-extensions'
+            }, {
+                runAt: Game.time + 40,
+                action: 'plan-extensions'
+            }, {
+                runAt: Game.time + 45,
+                action: 'plan-extensions'
+            }, {
+                runAt: Game.time + 50,
+                action: 'plan-roads-from-spawn-to-energy'
+            }, {
+                runAt: Game.time + 55,
+                action: 'plan-roads-from-energy-to-controller'
+            }, {
+                runAt: Game.time + 56,
+                action: 'build'
+            }
+        ];
     }
 
-    let employedStrategies = [
-        { at: 1, fn: strategies.buildLinksNearEnergySources },
-        { at: 5, fn: strategies.buildLinksNearSpawns },
-        { at: 10, fn: strategies.buildTowersNearSpawns },
-        { at: 15, fn: strategies.buildTowersNearControllers },
-        { at: 45, fn: strategies.buildExtensions },
-        { at: 75, fn: strategies.buildRoadsFromSpawnToEnergy },
-        { at: 100, fn: strategies.buildRoadsFromEnergyToController }
-    ];
+    let worklist = Memory.architect.worklist;
+    while (worklist.length > 0 && worklist[0].runAt <= Game.time) {
+        for (let name in Game.rooms) {
+            let room = Game.rooms[name];
 
-    for (let name in Game.rooms) {
-        let room = Game.rooms[name];
+            let task = worklist.shift();
 
-        // Skip if we've already created a build list for this room.
-        // if (Memory.buildLists === undefined || Memory.buildLists[name] === undefined) {
-        if (Game.time < Memory.architect.startPlanTimestamp + 100) {
-            Memory.architect.maps = Memory.architect.maps || {};
-            if (Memory.architect.maps[name] === undefined) {
-                Memory.architect.maps[name] = mapping.structureMap.createFromRoom(room);
+            let taskFn;
+
+            switch (task.action) {
+                case 'create-maps':
+                    Memory.architect.maps[name] = mapping.structureMap.createFromRoom(room);
+                    break;
+
+                case 'plan-links-near-energy-sources':
+                    taskFn = strategies.buildLinksNearEnergySources.run;
+                    break;
+
+                case 'plan-links-near-spawns':
+                    taskFn = strategies.buildLinksNearSpawns.run;
+                    break;
+
+                case 'plan-towers-near-spawns':
+                    taskFn = strategies.buildTowersNearSpawns.run;
+                    break;
+
+                case 'plan-towers-near-controllers':
+                    taskFn = strategies.buildTowersNearControllers.run;
+                    break;
+
+                case 'plan-extensions':
+                    taskFn = strategies.buildExtensions.run;
+                    break;
+
+                case 'plan-roads-from-spawn-to-energy':
+                    taskFn = strategies.buildRoadsFromSpawnToEnergy.run;
+                    break;
+
+                case 'plan-roads-from-energy-to-controller':
+                    taskFn = strategies.buildRoadsFromEnergyToController.run;
+                    break;
+
+                case 'build':
+                    taskFn = function (room) {
+                        build(room);
+                    };
+                    break;
+
+                default:
+                    taskFn = function () {
+                        console.log(`ERROR!: Unrecognized action: ${task.action}`);
+                    };
+                    break;
             }
-            let map = Memory.architect.maps[name];
 
-            Memory.architect.buildLists = Memory.architect.buildLists || {};
-            let buildList = Memory.architect.buildLists[name] || [];
+            if (taskFn !== undefined) {
+                let map = Memory.architect.maps[name];
+                let buildList = Memory.architect.buildLists[name] || [];
+                taskFn(room, map, buildList);
+                mapping.structureMap.print(Memory.architect.maps[name]);
 
-            employedStrategies
-                .filter(strategy => Game.time === Memory.architect.startPlanTimestamp + strategy.at)
-                .forEach(strategy => {
-                    strategy.fn.run(room, map, buildList)
-                    mapping.structureMap.print(map);
-                });
-
-            Memory.architect.buildLists[name] = buildList;
-        } else {
-            if (Memory.lastBuildTime === undefined) {
-                Memory.lastBuildTime = Game.time;
-            }
-
-            if (Game.time >= (Memory.lastBuildTime + 200)) {
-                console.log("Placing construction sites. Build list has items: ", Memory.architect.buildLists[name].length);
-
-                Memory.lastBuildTime = Game.time;
-
-                let nextBuildList = [];
-
-                while (Memory.architect.buildLists[name].length > 0) {
-                    let action = Memory.architect.buildLists[name].shift();
-                    let result = room.createConstructionSite(action.pos.x, action.pos.y, action.type);
-                    if (result !== OK) {
-                        nextBuildList.push(action);
-                    }
-                }
-
-                Memory.architect.buildLists[name] = nextBuildList;
-                Memory.lastBuildTime = Game.time;
+                Memory.architect.maps[name] = map;
+                Memory.architect.buildLists[name] = buildList;
             }
         }
     }
+}
+
+function build(room) {
+    let buildList = Memory.architect.buildLists[room.name];
+    console.log("Placing construction sites. Build list has items: ", buildList.length);
+
+    let nextBuildList = [];
+
+    while (buildList.length > 0) {
+        let action = buildList.shift();
+        let result = room.createConstructionSite(action.pos.x, action.pos.y, action.type);
+        if (result !== OK) {
+            nextBuildList.push(action);
+        }
+    }
+
+    Memory.architect.buildLists[room.name] = nextBuildList;
+
+    Memory.architect.worklist.push({
+        runAt: Game.time + 100,
+        task: 'build'
+    });
 }
 
 module.exports = {
