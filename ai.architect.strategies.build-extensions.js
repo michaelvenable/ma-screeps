@@ -11,52 +11,50 @@ let mappingHelpers = require('mapping.helpers');
 function run(room, structureMap, buildList) {
     let area = BoundingBox.fromCoordinates({ x: 0, y: 0 }, { x: 49, y: 49 });
 
-    let numExtensions = 0;
+    let numExtensions = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_EXTENSION }}).length;
 
-    while (numExtensions < 60) {
-        let candidates = [];
+    let candidates = [];
 
-        mappingHelpers.locateClearAreas(room, structureMap, area, 3, 3).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 3, 3).forEach(c => candidates.push(c));
 
-        mappingHelpers.locateClearAreas(room, structureMap, area, 3, 4).forEach(c => candidates.push(c));
-        mappingHelpers.locateClearAreas(room, structureMap, area, 3, 5).forEach(c => candidates.push(c));
-        mappingHelpers.locateClearAreas(room, structureMap, area, 3, 6).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 3, 4).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 3, 5).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 3, 6).forEach(c => candidates.push(c));
 
-        mappingHelpers.locateClearAreas(room, structureMap, area, 4, 3).forEach(c => candidates.push(c));
-        mappingHelpers.locateClearAreas(room, structureMap, area, 5, 3).forEach(c => candidates.push(c));
-        mappingHelpers.locateClearAreas(room, structureMap, area, 6, 3).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 4, 3).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 5, 3).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 6, 3).forEach(c => candidates.push(c));
 
-        mappingHelpers.locateClearAreas(room, structureMap, area, 4, 4).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 4, 4).forEach(c => candidates.push(c));
 
-        mappingHelpers.locateClearAreas(room, structureMap, area, 4, 5).forEach(c => candidates.push(c));
-        mappingHelpers.locateClearAreas(room, structureMap, area, 4, 6).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 4, 5).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 4, 6).forEach(c => candidates.push(c));
 
-        mappingHelpers.locateClearAreas(room, structureMap, area, 5, 4).forEach(c => candidates.push(c));
-        mappingHelpers.locateClearAreas(room, structureMap, area, 6, 4).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 5, 4).forEach(c => candidates.push(c));
+    mappingHelpers.locateClearAreas(room, structureMap, area, 6, 4).forEach(c => candidates.push(c));
 
-        let areas = candidates.sort(models.ExtensionSiteCandidate.compareFunction);
+    let areas = candidates.sort(models.ExtensionSiteCandidate.compareFunction);
 
-        if (areas.length > 0) {
-            let locations = areas[0].getBuildLocations();
+    if (areas.length > 0) {
+        let locations = areas[0].getBuildLocations();
 
-            locations.forEach(location => {
-                if (numExtensions >= 60) {
-                    return;
-                }
+        locations.forEach(location => {
+            if (numExtensions >= 60) {
+                return;
+            }
 
-                structureMap[location.y][location.x] = {
-                    type: STRUCTURE_EXTENSION,
-                    state: 'planned'
-                };
+            structureMap[location.y][location.x] = {
+                type: STRUCTURE_EXTENSION,
+                state: 'planned'
+            };
 
-                buildList.push({
-                    type: STRUCTURE_EXTENSION,
-                    pos: location
-                });
-
-                numExtensions++;
+            buildList.push({
+                type: STRUCTURE_EXTENSION,
+                pos: location
             });
-        }
+
+            numExtensions++;
+        });
     }
 }
 
