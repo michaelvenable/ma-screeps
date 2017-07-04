@@ -132,7 +132,6 @@ function run() {
             if (taskFn !== undefined) {
                 let map = Memory.architect.maps[name];
                 let buildList = Memory.architect.buildLists[name] || [];
-                console.log("-------- START: ", buildList);
                 mapping.structureMap.print(Memory.architect.maps[name]);
 
                 Memory.architect.maps[name] = map;
