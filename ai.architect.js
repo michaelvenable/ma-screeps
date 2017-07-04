@@ -10,6 +10,18 @@ function run() {
         buildLists: {}
     };
 
+    if (Memory.architect.worklist !== undefined) {
+        Memory.architect.worklist.sort((a, b) => {
+            if (a.runAt < b.runAt) {
+                return -1;
+            } else if (a.runAt > b.runAt) {
+                return 1;
+            }
+
+            return 0;
+        });
+    }
+
     if (Memory.architect.worklist === undefined) {
         Memory.architect.worklist = [
             {
@@ -107,9 +119,7 @@ function run() {
                     break;
 
                 case 'build':
-                    taskFn = function (room) {
-                        build(room);
-                    };
+                    build(room);
                     break;
 
                 default:
@@ -122,7 +132,7 @@ function run() {
             if (taskFn !== undefined) {
                 let map = Memory.architect.maps[name];
                 let buildList = Memory.architect.buildLists[name] || [];
-                taskFn(room, map, buildList);
+                console.log("-------- START: ", buildList);
                 mapping.structureMap.print(Memory.architect.maps[name]);
 
                 Memory.architect.maps[name] = map;
@@ -143,7 +153,7 @@ function build(room) {
     while (buildList.length > 0) {
         let action = buildList.shift();
 
-        if (numConstructionSites <= 5) {
+        if (numConstructionSites <5) {
             let result = room.createConstructionSite(action.pos.x, action.pos.y, action.type);
             if (result === OK) {
                 numConstructionSites += 1;

@@ -1,7 +1,7 @@
 function bulldozeRoom(roomName) {
     let room = Game.rooms[roomName];
     if (room === undefined) {
-        console.log(`No room with name ${roomName}.`);
+        console.log(`CLI: No room with name ${roomName}.`);
         return;
     }
 
@@ -25,6 +25,16 @@ function bulldozeRoom(roomName) {
     console.log("CLI: Room structures have been destroyed.");
 }
 
+function scheduleTask(action, ticksFromNow) {
+    ticksFromNow = ticksFromNow || 1;
+
+    Memory.architect.worklist.push({
+        action: action,
+        runAt: Game.time + ticksFromNow
+    });
+}
+
 module.exports = {
-    bulldozeRoom: bulldozeRoom
+    bulldozeRoom: bulldozeRoom,
+    scheduleTask: scheduleTask
 }
