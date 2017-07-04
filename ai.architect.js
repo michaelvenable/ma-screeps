@@ -114,7 +114,7 @@ function run() {
 
                 default:
                     taskFn = function () {
-                        console.log(`ERROR!: Unrecognized action: ${task.action}`);
+                        console.log(`Architect: ERROR!: Unrecognized action: ${task.action}`);
                     };
                     break;
             }
@@ -133,15 +133,24 @@ function run() {
 }
 
 function build(room) {
+    let numConstructionSites = room.find(FIND_CONSTRUCTION_SITES).length;
+
     let buildList = Memory.architect.buildLists[room.name];
-    console.log("Placing construction sites. Build list has items: ", buildList.length);
+    console.log("Architect: Placing construction sites. Build list has items: ", buildList.length);
 
     let nextBuildList = [];
 
     while (buildList.length > 0) {
         let action = buildList.shift();
-        let result = room.createConstructionSite(action.pos.x, action.pos.y, action.type);
-        if (result !== OK) {
+
+        if (numConstructionSites <= 5) {
+            let result = room.createConstructionSite(action.pos.x, action.pos.y, action.type);
+            if (result === OK) {
+                numConstructionSites += 1;
+            } else {
+                nextBuildList.push(action);
+            }
+        } else {
             nextBuildList.push(action);
         }
     }
@@ -149,7 +158,7 @@ function build(room) {
     Memory.architect.buildLists[room.name] = nextBuildList;
 
     Memory.architect.worklist.push({
-        runAt: Game.time + 100,
+        runAt: Game.time + 200,
         task: 'build'
     });
 }
