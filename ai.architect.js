@@ -148,6 +148,8 @@ function build(room) {
     let buildList = Memory.architect.buildLists[room.name];
     console.log("Architect: Placing construction sites. Build list has items: ", buildList.length);
 
+    buildList.sort(buildTaskCompare);
+
     let nextBuildList = [];
 
     while (buildList.length > 0) {
@@ -171,6 +173,48 @@ function build(room) {
         runAt: Game.time + 250,
         action: 'build'
     });
+}
+
+function buildTaskCompare(a, b) {
+    if (a.type === b.type) {
+        return 0;
+    }
+
+    // Roads have priority.
+    if (a.type === STRUCTURE_ROAD) {
+        return -1;
+    }
+
+    if (b.type === STRUCTURE_ROAD) {
+        return 1;
+    }
+
+    // Towers have 2nd priority.
+    if (a.type === STRUCTURE_TOWER) {
+        return -1;
+    }
+
+    if (b.type === STRUCTURE_TOWER) {
+        return 1;
+    }
+
+    // Extensions have 3rd priority.
+    if (a.type === STRUCTURE_EXTENSION) {
+        return -1;
+    }
+
+    if (b.type === STRUCTURE_EXTENSION) {
+        return 1;
+    }
+
+    // Links have 4th priority.
+    if (a.type === STRUCTURE_LINK) {
+        return -1;
+    }
+
+    if (b.type === STRUCTURE_LINK) {
+        return 1;
+    }
 }
 
 module.exports = {
