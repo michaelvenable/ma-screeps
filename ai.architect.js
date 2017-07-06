@@ -168,8 +168,8 @@ function build(room) {
     Memory.architect.buildLists[room.name] = nextBuildList;
 
     Memory.architect.worklist.push({
-        runAt: Game.time + 200,
-        task: 'build'
+        runAt: Game.time + 250,
+        action: 'build'
     });
 }
 

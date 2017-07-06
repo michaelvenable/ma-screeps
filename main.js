@@ -16,11 +16,8 @@ let mapping = require('mapping');
 module.exports.loop = function () {
     console.log(`================== (Tick: ${Game.time}) ==================`);
 
-    for (let name in Game.rooms) {
-        let room = Game.rooms[name];
-
-        let peasants = room.find(FIND_MY_CREEPS).filter(c => c.memory.role === 'peasant');
-        console.log(`Peasants (${room.name}): ${peasants.length}`);
+    if (Memory.architect && Memory.architect.settings && Memory.architect.settings.showWorklist) {
+        printWorklist();
     }
 
     ai.architect.run();
@@ -88,6 +85,18 @@ function runControllers() {
         if (room.controller !== undefined && room.controller.my) {
             ai.controller.run(room.controller);
         }
+    }
+}
+
+function printWorklist() {
+    let worklist = Memory.architect.worklist || {};
+
+    console.log(`Worklist contains ${worklist.length} ${worklist.length === 1 ? "item" : "items"}.`);
+
+    for (let i = 0; i < worklist.length; i++) {
+        let workItem = worklist[i];
+        let timeUntil = workItem.runAt - Game.time;
+        console.log(`  ${i+1}. Action "${workItem.action}" in ${timeUntil} ${timeUntil === 1 ? "tick" : "ticks"}.`);
     }
 }
 
