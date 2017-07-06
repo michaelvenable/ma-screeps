@@ -16,13 +16,6 @@ let mapping = require('mapping');
 module.exports.loop = function () {
     console.log(`================== (Tick: ${Game.time}) ==================`);
 
-    for (let name in Game.rooms) {
-        let room = Game.rooms[name];
-
-        let peasants = room.find(FIND_MY_CREEPS).filter(c => c.memory.role === 'peasant');
-        console.log(`Peasants (${room.name}): ${peasants.length}`);
-    }
-
     ai.architect.run();
 
     assignTasksToPeasants();
