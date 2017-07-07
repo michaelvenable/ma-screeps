@@ -14,29 +14,60 @@ let actions = {
 
 let builds = {
     peasant: [
-        [WORK, CARRY, MOVE],
-        [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-        [WORK, CARRY, MOVE, WORK, CARRY, MOVE, CARRY, MOVE, MOVE]
-    ],
-    guard: [
-        [ATTACK, MOVE, ATTACK, MOVE]
+        {
+            count: 25,
+            getCost: getCost,
+            parts: [
+                WORK,
+                CARRY,
+                MOVE
+            ]
+        }, {
+            count: 20,
+            getCost: getCost,
+            parts: [
+                WORK, WORK, WORK,
+                CARRY, CARRY,
+                MOVE, MOVE
+            ]
+        }, {
+            count: 15,
+            getCost: getCost,
+            parts: [
+                WORK,   WORK,   WORK,   WORK,   WORK,
+                CARRY,  CARRY,  CARRY,  CARRY,
+                MOVE,   MOVE,   MOVE,   MOVE
+            ]
+        }, {
+            count: 10,
+            getCost: getCost,
+            parts: [
+                WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,
+                CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,
+                MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE
+            ]
+        }, {
+            count: 6,
+            getCost: getCost,
+            parts: [
+                WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,
+                CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,
+                MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE
+            ]
+        }, {
+            count: 3,
+            getCost: getCost,
+            parts: [
+                WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,
+                CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,
+                MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE
+            ]
+        }
     ]
 };
 
-let buildCosts = {};
-
-for (let className in builds) {
-    buildCosts[className] = []
-
-    for (let i = 0; i < builds[className].length; i++) {
-        buildCosts[className].push(0);
-
-        let bodyParts = builds[className][i];
-        for (let j = 0; j < bodyParts.length; j++) {
-            let bodyPart = bodyParts[j];
-            buildCosts[className][i] += BODYPART_COST[bodyPart];
-        }
-    }
+function getCost() {
+    return this.parts.reduce((sum, part) => sum + BODYPART_COST[part], 0);
 }
 
 /**
@@ -52,7 +83,6 @@ let roomWidth = 50;
 module.exports = {
     actions: actions,
     builds: builds,
-    buildCosts: buildCosts,
     roles: roles,
     roomHeight: roomHeight,
     roomWidth: roomWidth
