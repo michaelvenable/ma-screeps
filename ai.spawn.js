@@ -1,7 +1,6 @@
 let roles = require('constants').roles;
 
 let builds = require('constants').builds;
-let buildCosts = require('constants').buildCosts;
 
 /**
  * Advances a spawn point one tick.
@@ -12,6 +11,7 @@ function run(spawn) {
     }
 
     cleanUpDeadCreeps();
+
     spawnPeasantIfNeeded(spawn);
 }
 
@@ -25,29 +25,34 @@ function cleanUpDeadCreeps() {
 }
 
 function spawnPeasantIfNeeded(spawn) {
-    let peasants = spawn.room.find(FIND_MY_CREEPS).filter(creep => creep.memory.role === 'peasant');
+    let numPeasants = spawn.room.find(FIND_MY_CREEPS).filter(creep => creep.memory.role === 'peasant').length;
 
-    if (peasants.length < 20) {
-        spawnPeasant(spawn, peasants);
+    if (numPeasants < 3) {
+        // Spawn a few level 0 peasants just to kick things off.
+        let build = builds.peasant[0];
+        let result = spawn.createCreep(build.parts, undefined, { role: roles.peasant });
+        console.log(`Architect: Spawning a level 0 peasant, because we have no peasants: ${result}`);
         return;
     }
-}
 
-function spawnPeasant(spawn, peasants) {
-    if (spawn.room.energyCapacityAvailable >= buildCosts.peasant[1] && peasants.length > 2) {
-        if (spawn.room.energyAvailable > buildCosts.peasant[1]) {
-            console.log("Spawning a peasant.");
-            let result = spawn.createCreep(builds.peasant[1], undefined, { role: roles.peasant });
-            if (result !== OK) {
-                console.log(`${spawn} created a level 2 peasant: ${result}`);
-            }
-        }
-    } else {
-        if (spawn.room.energyAvailable > buildCosts.peasant[0]) {
-            console.log("Spawning a peasant.");
-            let result = spawn.createCreep(builds.peasant[0], undefined, { role: roles.peasant });
-            if (result !== OK) {
-                console.log(`${spawn} created a level 1 peasant: ${result}`);
+    for (let level = builds.peasant.length - 1; level >= 0; level--) {
+        let build = builds.peasant[level];
+
+        if (spawn.room.energyCapacityAvailable >= build.getCost()) {
+            if (spawn.room.energyAvailable >= build.getCost()) {
+                if (numPeasants >= build.count) {
+                    // Already have enough peasants. Quit.
+                    return;
+                }
+
+                let result = spawn.createCreep(build.parts, undefined, { role: roles.peasant });
+                console.log(`Architect: Spawning a level ${level} peasant: ${result}`);
+
+                // We've spawned a peasant. Quit.
+                return;
+            } else {
+                // We don't have enough energy saved up. Quit.
+                return;
             }
         }
     }
