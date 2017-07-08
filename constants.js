@@ -34,33 +34,9 @@ let builds = {
             count: 15,
             getCost: getCost,
             parts: [
-                WORK,   WORK,   WORK,   WORK,   WORK,
-                CARRY,  CARRY,  CARRY,  CARRY,
-                MOVE,   MOVE,   MOVE,   MOVE
-            ]
-        }, {
-            count: 10,
-            getCost: getCost,
-            parts: [
-                WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,
-                CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,
-                MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE
-            ]
-        }, {
-            count: 6,
-            getCost: getCost,
-            parts: [
-                WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,
-                CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,
-                MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE
-            ]
-        }, {
-            count: 3,
-            getCost: getCost,
-            parts: [
-                WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,   WORK,
-                CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,  CARRY,
-                MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE,   MOVE
+                WORK, WORK, WORK,
+                CARRY, CARRY, CARRY,
+                MOVE, MOVE
             ]
         }
     ]
