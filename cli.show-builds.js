@@ -1,6 +1,7 @@
 let builds = require('constants').builds;
+let roles = require('constants').roles;
 
-let columnWidths = [20, 10, 10, 15];
+let columnWidths = [20, 10, 10, 15, 10];
 
 let row = '';
 
@@ -38,6 +39,7 @@ function headerRow() {
     nextCell('LEVEL', columnWidths[1]);
     nextCell('# PARTS', columnWidths[2]);
     nextCell('COST', columnWidths[3]);
+    nextCell('COUNT', columnWidths[4]);
     endOfRow();
 }
 
@@ -55,9 +57,25 @@ function body() {
             nextCell(i.toString(), columnWidths[1]);
             nextCell(build.parts.length.toString(), columnWidths[2]);
             nextCell(build.getCost().toString(), columnWidths[3]);
+            nextCell(getCountOfLevel(i).toString(), columnWidths[4]);
             endOfRow();
         }
     }
+}
+
+function getCountOfLevel(level) {
+    let count = 0;
+
+    for (let name in Game.rooms) {
+        let room = Game.rooms[name];
+
+        room.find(FIND_MY_CREEPS)
+            .filter(creep => creep.memory.role === roles.peasant)
+            .filter(creep => creep.memory.level === level)
+            .forEach(creep => count++);
+    }
+
+    return count;
 }
 
 function cell(content, width) {
