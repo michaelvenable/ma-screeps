@@ -60,7 +60,6 @@ function body() {
     }
 }
 
-
 function cell(content, width) {
     let text = content.substring(0, width);
     row += text;
