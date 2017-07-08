@@ -1,10 +1,8 @@
-function scheduleTask(action, ticksFromNow) {
-    ticksFromNow = ticksFromNow || 1;
+let worklist = require('models').worklist;
 
-    Memory.architect.worklist.push({
-        action: action,
-        runAt: Game.time + ticksFromNow
-    });
+function scheduleTask(god, action, ticksFromNow) {
+    ticksFromNow = ticksFromNow || 1;
+    worklist.add(god, action, ticksFromNow);
 }
 
 module.exports = scheduleTask;

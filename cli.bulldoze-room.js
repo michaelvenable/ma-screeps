@@ -1,3 +1,5 @@
+let worklist = require('models').worklist;
+
 function bulldozeRoom(roomName) {
     let room = Game.rooms[roomName];
     if (room === undefined) {
@@ -16,11 +18,11 @@ function bulldozeRoom(roomName) {
         .filter(structure => structure.structureType === STRUCTURE_ROAD)
         .forEach(structure => structure.destroy());
 
-    Memory.architect.worklist = undefined;
     Memory.architect.maps = {};
     Memory.architect.buildLists = {};
 
-    Memory.rebuild = undefined;
+    worklist.add('architecture', 'create-maps');
+
 
     console.log("CLI: Room structures have been destroyed.");
 }
