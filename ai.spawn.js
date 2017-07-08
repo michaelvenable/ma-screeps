@@ -45,6 +45,11 @@ function spawnPeasantIfNeeded(spawn) {
                     return;
                 }
 
+                let memory = {
+                    role: roles.peasant,
+                    level: level
+                };
+
                 let result = spawn.createCreep(build.parts, undefined, { role: roles.peasant });
                 console.log(`Architect: Spawning a level ${level} peasant: ${result}`);
 
