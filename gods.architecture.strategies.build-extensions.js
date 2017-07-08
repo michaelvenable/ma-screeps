@@ -1,6 +1,9 @@
 let BoundingBox = require('class.bounding-box');
-let models = require('ai.architect.models');
+let models = require('gods.architecture.models');
 let mappingHelpers = require('mapping.helpers');
+let worklist = require('models').worklist;
+
+let constants = require('constants');
 
 /**
  * Places construction sites for energy extensions in a room. Attempts to find large areas of empty land in
@@ -11,19 +14,14 @@ let mappingHelpers = require('mapping.helpers');
 function run(room, structureMap, buildList) {
     let area = BoundingBox.fromCoordinates({ x: 0, y: 0 }, { x: 49, y: 49 });
 
-    let numExtensions = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_EXTENSION }}).length;
+    let numExtensions = 0;
+
+    structureMap.forEach(row => {
+        row.filter(tile => tile !== 0 && tile.type === STRUCTURE_EXTENSION)
+            .forEach(tile => numExtensions++);
+    });
 
     let candidates = [];
-
-    // mappingHelpers.locateClearAreas(room, structureMap, area, 3, 3).forEach(c => candidates.push(c));
-
-    // mappingHelpers.locateClearAreas(room, structureMap, area, 3, 4).forEach(c => candidates.push(c));
-    // mappingHelpers.locateClearAreas(room, structureMap, area, 3, 5).forEach(c => candidates.push(c));
-    // mappingHelpers.locateClearAreas(room, structureMap, area, 3, 6).forEach(c => candidates.push(c));
-
-    // mappingHelpers.locateClearAreas(room, structureMap, area, 4, 3).forEach(c => candidates.push(c));
-    // mappingHelpers.locateClearAreas(room, structureMap, area, 5, 3).forEach(c => candidates.push(c));
-    // mappingHelpers.locateClearAreas(room, structureMap, area, 6, 3).forEach(c => candidates.push(c));
 
     mappingHelpers.locateClearAreas(room, structureMap, area, 4, 4).forEach(c => candidates.push(c));
 
@@ -55,6 +53,13 @@ function run(room, structureMap, buildList) {
 
             numExtensions++;
         });
+    }
+
+    console.log(numExtensions);
+    if (numExtensions < 60) {
+        worklist.add('architecture', 'plan-extensions', 3);
+    } else {
+        worklist.add('architecture', 'plan-roads-from-spawn-to-energy', 3);
     }
 }
 

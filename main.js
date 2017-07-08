@@ -3,6 +3,7 @@ let depositAction = require('action.deposit');
 let deliveringAction = require('action.delivering');
 
 let ai = require('ai');
+let gods = require('gods');
 
 let DeliveryEnergyToController = require('coordinator.deliver-energy-to-controller');
 let DeliverEnergyToSpawn = require('coordinator.deliver-energy-to-spawn');
@@ -13,14 +14,16 @@ let DeliverEnergyToTowers = require('coordinator.deliver-energy-to-towers');
 
 let mapping = require('mapping');
 
+let worklist = require('models').worklist;
+
 module.exports.loop = function () {
     console.log(`================== (Tick: ${Game.time}) ==================`);
 
-    if (Memory.architect && Memory.architect.settings && Memory.architect.settings.showWorklist) {
-        printWorklist();
+    var nextAction = worklist.getNext();
+    while (nextAction !== null) {
+        gods[nextAction.god].run(nextAction.action);
+        nextAction = worklist.getNext();
     }
-
-    ai.architect.run();
 
     assignTasksToPeasants();
     runTowers();
@@ -85,18 +88,6 @@ function runControllers() {
         if (room.controller !== undefined && room.controller.my) {
             ai.controller.run(room.controller);
         }
-    }
-}
-
-function printWorklist() {
-    let worklist = Memory.architect.worklist || {};
-
-    console.log(`Worklist contains ${worklist.length} ${worklist.length === 1 ? "item" : "items"}.`);
-
-    for (let i = 0; i < worklist.length; i++) {
-        let workItem = worklist[i];
-        let timeUntil = workItem.runAt - Game.time;
-        console.log(`  ${i+1}. Action "${workItem.action}" in ${timeUntil} ${timeUntil === 1 ? "tick" : "ticks"}.`);
     }
 }
 

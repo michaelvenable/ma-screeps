@@ -1,5 +1,5 @@
 let BoundingBox = require('class.bounding-box');
-let models = require('ai.architect.models');
+let models = require('god.architect.models');
 
 /**
  * Determines if an area contains a particular type of structure or if a construction site has been placed for
