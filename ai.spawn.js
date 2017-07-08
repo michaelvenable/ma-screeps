@@ -29,9 +29,7 @@ function spawnPeasantIfNeeded(spawn) {
 
     if (numPeasants < 3) {
         // Spawn a few level 0 peasants just to kick things off.
-        let build = builds.peasant[0];
-        let result = spawn.createCreep(build.parts, undefined, { role: roles.peasant });
-        console.log(`Architect: Spawning a level 0 peasant, because we have no peasants: ${result}`);
+        spawnPeasant(spawn, 0);
         return;
     }
 
@@ -45,8 +43,7 @@ function spawnPeasantIfNeeded(spawn) {
                     return;
                 }
 
-                let result = spawn.createCreep(build.parts, undefined, { role: roles.peasant });
-                console.log(`Architect: Spawning a level ${level} peasant: ${result}`);
+                spawnPeasant(spawn, level);
 
                 // We've spawned a peasant. Quit.
                 return;
@@ -58,6 +55,17 @@ function spawnPeasantIfNeeded(spawn) {
     }
 }
 
+function spawnPeasant(spawn, level) {
+    let build = builds.peasant[level];
+
+    let memory = {
+        role: roles.peasant,
+        level: level
+    };
+
+    let result = spawn.createCreep(build.parts, undefined, memory);
+    console.log(`Architect: Spawning a level ${level} peasant: ${result}`);
+}
 
 /**
  * Provides the AI for spawns.
