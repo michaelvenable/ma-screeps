@@ -1,4 +1,4 @@
-let models = require('ai.architect.models');
+let models = require('gods.architect.models');
 let BoundingBox = require('class.bounding-box');
 let constants = require('constants');
 

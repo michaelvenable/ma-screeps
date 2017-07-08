@@ -3,6 +3,7 @@ let depositAction = require('action.deposit');
 let deliveringAction = require('action.delivering');
 
 let ai = require('ai');
+let gods = require('gods');
 
 let DeliveryEnergyToController = require('coordinator.deliver-energy-to-controller');
 let DeliverEnergyToSpawn = require('coordinator.deliver-energy-to-spawn');
@@ -20,7 +21,7 @@ module.exports.loop = function () {
         printWorklist();
     }
 
-    ai.architect.run();
+    gods.architect.run();
 
     assignTasksToPeasants();
     runTowers();
