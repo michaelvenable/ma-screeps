@@ -21,7 +21,7 @@ module.exports.loop = function () {
         printWorklist();
     }
 
-    gods.architect.run();
+    gods.architecture.run();
 
     assignTasksToPeasants();
     runTowers();
