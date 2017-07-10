@@ -56,6 +56,12 @@ function run(action) {
                 worklist.add('architecture', 'build', 3);
                 break;
 
+            case 'rebuild-from-structure-map':
+                taskFn = strategies.rebuildFromStructureMap.run;
+                let oneDayInTicks = 28800;
+                worklist.add('architecture', 'rebuild-from-structure-map', oneDayInTicks);
+                break;
+
             case 'build':
                 build(room);
                 break;

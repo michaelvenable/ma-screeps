@@ -5,5 +5,6 @@ module.exports = {
     buildTowersNearControllers: require('gods.architecture.strategies.build-towers-near-controllers'),
     buildTowersNearSpawns: require('gods.architecture.strategies.build-towers-near-spawns'),
     buildLinksNearEnergySources: require('gods.architecture.strategies.build-links-near-energy-sources'),
-    buildLinksNearSpawns: require('gods.architecture.strategies.build-links-near-spawns')
+    buildLinksNearSpawns: require('gods.architecture.strategies.build-links-near-spawns'),
+    rebuildFromStructureMap: require('gods.architecture.strategies.rebuild-from-structure-map')
 };
