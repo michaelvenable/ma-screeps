@@ -34,16 +34,24 @@ let builds = {
             count: 15,
             getCost: getCost,
             parts: [
-                WORK, WORK, WORK,
-                CARRY, CARRY, CARRY, CARRY,
-                MOVE, MOVE, MOVE, MOVE
+                WORK,  WORK,  WORK,
+                CARRY, CARRY, CARRY, CARRY, CARRY,
+                MOVE,  MOVE,  MOVE,  MOVE
+            ]
+        }, {
+            count: 10,
+            getCost: getCost,
+            parts: [
+                WORK,  WORK,  WORK,  WORK,
+                CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,
+                MOVE,  MOVE,  MOVE,  MOVE,  MOVE
             ]
             // Change history:
-            //  7/8 Added a MOVE
-            //  7/8 Added a CARRY
+            //   7/10   Added CARRY
+            //
             // Movement
             //  Empty: 3 + 0 - 8 = 0
-            //  Full:  3 + 4 - 8 = 0
+            //  Full:  3 + 5 - 8 = 0
         }
     ]
 };
