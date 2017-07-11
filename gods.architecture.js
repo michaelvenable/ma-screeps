@@ -53,17 +53,24 @@ function run(action) {
 
             case 'plan-roads-from-energy-to-controller':
                 taskFn = strategies.buildRoadsFromEnergyToController.run;
-                worklist.add('architecture', 'build', 3);
+                worklist.add('architecture', 'place-walls', 3);
                 break;
 
-            case 'rebuild-from-structure-map':
-                taskFn = strategies.rebuildFromStructureMap.run;
-                let oneDayInTicks = 28800;
-                worklist.add('architecture', 'rebuild-from-structure-map', oneDayInTicks);
+            case 'place-walls':
+                console.log("XXXXXXXXXXXXXXXXXXXXX Placing walls.");
+                taskFn = strategies.placeWalls.run;
+                worklist.add('architecture', 'build', 3);
                 break;
 
             case 'build':
                 build(room);
+                break;
+
+            case 'rebuild-from-structure-map':
+                taskFn = strategies.rebuildFromStructureMap.run;
+                worklist.add('architecture', 'place-walls', 3);
+                let oneDayInTicks = 28800;
+                worklist.add('architecture', 'rebuild-from-structure-map', oneDayInTicks);
                 break;
 
             default:
