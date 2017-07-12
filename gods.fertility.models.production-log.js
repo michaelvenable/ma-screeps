@@ -1,13 +1,30 @@
-let columnWidths = [20, 20, 60, 15];
-
+let columnWidths = [10, 10, 10];
 let row = '';
 
-function showJobs() {
+function add(time, roomName, progress) {
+    getProductionLog().push({
+        time: time,
+        room: roomName,
+        progress: progress
+    });
+
+    let logLength = getProductionLog().length;
+    if (getProductionLog().length > logLength) {
+        getProductionLog().splice(-50);
+    }
+}
+
+function print() {
     firstRow();
     headerRow();
     separatorRow();
     body();
     lastRow();
+}
+
+function getProductionLog() {
+    Memory.gods.fertility.productionLog = Memory.gods.fertility.productionLog || [];
+    return Memory.gods.fertility.productionLog;
 }
 
 function firstRow() {
@@ -32,10 +49,9 @@ function firstRow() {
 
 function headerRow() {
     startOfRow();
-    cell('CREEP', columnWidths[0]);
-    nextCell('JOB', columnWidths[1]);
-    nextCell('TARGET', columnWidths[2]);
-    nextCell('ENERGY', columnWidths[3]);
+    cell('TIME', columnWidths[0]);
+    nextCell('ROOM', columnWidths[1]);
+    nextCell('PROGRESS', columnWidths[2]);
     endOfRow();
 }
 
@@ -44,22 +60,15 @@ function startOfRow() {
 }
 
 function body() {
-    for (let name in Game.creeps) {
-        let creep = Game.creeps[name];
+    let log = getProductionLog();
 
+    log.forEach(entry => {
         startOfRow();
-        cell(name, columnWidths[0]);
-        nextCell(creep.memory.job !== undefined ? creep.memory.job.action : '', columnWidths[1]);
-
-        let targetId = creep.memory.job !== undefined ? creep.memory.job.target : undefined;
-        let target = targetId ? Game.getObjectById(targetId) : '';
-        nextCell(target.toString(), columnWidths[2]);
-
-        let energy = creep.carry.energy;
-        let capacity = creep.carryCapacity;
-        nextCell(`${energy} / ${capacity}`, columnWidths[3]);
+        cell(entry.time.toString(), columnWidths[0]);
+        nextCell(entry.room, columnWidths[1]);
+        nextCell(entry.progress.toString(), columnWidths[2]);
         endOfRow();
-    }
+    });
 }
 
 function cell(content, width) {
@@ -122,4 +131,7 @@ function lastRow() {
     console.log(row);
 }
 
-module.exports = showJobs;
+module.exports = {
+    add: add,
+    print: print
+}
