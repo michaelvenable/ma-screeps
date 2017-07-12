@@ -7,12 +7,6 @@ function run(action) {
     actions[action].run();
 }
 
-function getProductionLog() {
-    Memory.gods.fertility.productionLog = Memory.gods.fertility.productionLog || [];
-    return Memory.gods.fertility.productionLog;
-}
-
 module.exports = {
-    run: run,
-    getProductionLog: getProductionLog
+    run: run
 };
