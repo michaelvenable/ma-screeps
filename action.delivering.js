@@ -1,3 +1,5 @@
+let performance = require('performance');
+
 function run(creep) {
     if (creep.carry.energy === 0 && creep.memory.action === 'delivering') {
         console.log(`${creep} is out of energy, so is done with the job (1).`);
@@ -28,6 +30,8 @@ function run(creep) {
                 creep.moveTo(target);
             } else if (result !== OK) {
                 console.log(`${creep} could not harvest energy from ${target}: ${result}.`);
+            } else {
+                performance.log.append('harvest', 1);
             }
         }
     } else {

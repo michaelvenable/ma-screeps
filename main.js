@@ -3,7 +3,7 @@ let depositAction = require('action.deposit');
 let deliveringAction = require('action.delivering');
 
 let ai = require('ai');
-let gods = require('gods');
+let commands = require('commands');
 
 let DeliveryEnergyToController = require('coordinator.deliver-energy-to-controller');
 let DeliverEnergyToSpawn = require('coordinator.deliver-energy-to-spawn');
@@ -21,7 +21,7 @@ module.exports.loop = function () {
 
     var nextAction = worklist.getNext();
     while (nextAction !== null) {
-        gods[nextAction.god].run(nextAction.action);
+        commands[nextAction.god][nextAction.action]();
         nextAction = worklist.getNext();
     }
 
