@@ -1,4 +1,4 @@
 module.exports = {
-    architecture: require('gods.architecture'),
+    architecture: require('architecture'),
     fertility: require('gods.fertility')
 };
