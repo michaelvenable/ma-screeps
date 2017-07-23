@@ -1,38 +1,38 @@
 Memory.performance = Memory.performance || {};
 Memory.performance.log = Memory.performance.log || {};
 
-function append(action, amount) {
-    ensureValidAction(action);
+function append(metric, amount) {
+    ensureValidMetric(metric);
 
-    if (Memory.performance.log[action] === undefined) {
-        Memory.performance.log[action] = 0;
-        reset(action);
+    if (Memory.performance.log[metric] === undefined) {
+        Memory.performance.log[metric] = 0;
+        reset(metric);
     };
 
-    Memory.performance.log[action] += amount;
+    Memory.performance.log[metric] += amount;
 }
 
-function get(action) {
-    ensureValidAction(action);
+function get(metric) {
+    ensureValidMetric(metric);
 
-    if (Memory.performance.log[action] === undefined) {
-        Memory.performance.log[action] = 0;
-        reset(action);
+    if (Memory.performance.log[metric] === undefined) {
+        Memory.performance.log[metric] = 0;
+        reset(metric);
     };
 
-    return Memory.performance.log[action];
+    return Memory.performance.log[metric];
 }
 
-function reset(action) {
-    ensureValidAction(action);
-    Memory.performance.log[action] = 0;
+function reset(metric) {
+    ensureValidMetric(metric);
+    Memory.performance.log[metric] = 0;
 }
 
-function ensureValidAction(action) {
-    let knownActions = ['harvest'];
+function ensureValidMetric(metric) {
+    let knownMetrics = ['harvested'];
 
-    if (!knownActions.includes(action)) {
-        throw new Error(`Performance.log: Unrecognized action: ${action}`);
+    if (!knownMetrics.includes(metric)) {
+        throw new Error(`Performance.log: Unrecognized metric: ${metric}`);
     }
 }
 

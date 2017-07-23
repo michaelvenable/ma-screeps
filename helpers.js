@@ -36,5 +36,6 @@ function pickRandomElement(array) {
 module.exports = {
     distance: distance,
     numberOfCreepsInRole: numberOfCreepsInRole,
-    pickRandomElement: pickRandomElement
+    pickRandomElement: pickRandomElement,
+    table: require('helpers.table')
 }

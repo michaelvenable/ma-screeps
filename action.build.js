@@ -29,7 +29,7 @@ function run(creep) {
             } else if (result !== OK) {
                 console.log(`${creep} could not harvest energy from ${target}: ${result}.`);
             } else {
-                performance.log.append('harvest', 1);
+                performance.log.append('harvested', 1);
             }
         }
     } else {
