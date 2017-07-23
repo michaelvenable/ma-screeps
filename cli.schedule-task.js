@@ -1,8 +1,8 @@
 let worklist = require('models').worklist;
 
-function scheduleTask(god, action, ticksFromNow) {
+function scheduleTask(component, command, ticksFromNow) {
     ticksFromNow = ticksFromNow || 1;
-    worklist.add(god, action, ticksFromNow);
+    worklist.add(component, command, ticksFromNow);
 }
 
 module.exports = scheduleTask;

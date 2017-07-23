@@ -6,13 +6,13 @@ let builds = require('constants').builds;
  * Advances a spawn point one tick.
  */
 function run(spawn) {
-    if (spawn.spawning) {
-        return;
-    }
+//     if (spawn.spawning) {
+//         return;
+//     }
 
     cleanUpDeadCreeps();
 
-    spawnPeasantIfNeeded(spawn);
+//     spawnPeasantIfNeeded(spawn);
 }
 
 function cleanUpDeadCreeps() {

@@ -5,22 +5,50 @@ Memory.spawns = Memory.spawns || {};
  * currently using.
  */
 function run() {
-    let currentBuild = Memory.spawns.currentBuild || [WORK, CARRY, MOVE];
-    let plannedBuilds = [];
+    let currentPlan = Memory.spawns.currentPlan;
+    if (currentPlan === undefined) {
+        currentPlan = {
+            count: 20,
+            parts: [WORK, CARRY, MOVE]
+        };
+    }
+
+    let plans = [];
+
+    // Increase the count by 1.
+    plans.push({
+        count: currentPlan.count + 1,
+        parts: currentPlan.parts
+    });
+
+    // Decrease the count by 1.
+    plans.push({
+        count: currentPlan.count - 1,
+        parts: currentPlan.parts
+    });
 
     // Add one of each body part to the plan.
     [WORK, CARRY, MOVE].forEach(bodyPart => {
         let nextBuild = [bodyPart];
-        currentBuild.forEach(part => nextBuild.push(part));
-        plannedBuilds.push(nextBuild);
+        currentPlan.parts.forEach(part => nextBuild.push(part));
+
+        plans.push({
+            count: currentPlan.count,
+            parts: nextBuild
+        });
     });
 
     // Also try removing a body part.
-    if (currentBuild.length > 3) {
-        plannedBuilds.push(currentBuild.slice(1));
+    if (currentPlan.parts.length > 3) {
+        plans.push(currentPlan.parts.slice(1));
     }
 
-    Memory.spawns.plannedBuilds = plannedBuilds;
+    Memory.spawns.buildPlans = plans;
 };
+
+function BuildPlan(count, parts) {
+    this.count = count;
+    this.parts = bodyParts;
+}
 
 module.exports = run;
