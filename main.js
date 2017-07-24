@@ -22,6 +22,18 @@ module.exports.loop = function () {
     var nextAction = worklist.getNext();
     while (nextAction !== null) {
         commands[nextAction.god][nextAction.action]();
+
+        if (nextAction.ticksUntilRepeat !== undefined) {
+            worklist.add(
+                nextAction.god,
+                nextAction.action,
+                {
+                    ticksFromNow: nextAction.ticksUntilRepeat,
+                    ticksUntilRepeat: nextAction.ticksUntilRepeat
+                }
+            );
+        }
+
         nextAction = worklist.getNext();
     }
 

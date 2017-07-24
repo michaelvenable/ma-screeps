@@ -57,9 +57,9 @@ function run(room, structureMap, buildList) {
 
     console.log(numExtensions);
     if (numExtensions < 60) {
-        worklist.add('architecture', 'plan-extensions', 3);
+        worklist.add('architecture', 'plan-extensions', { ticksFromNow: 3 });
     } else {
-        worklist.add('architecture', 'plan-roads-from-spawn-to-energy', 3);
+        worklist.add('architecture', 'plan-roads-from-spawn-to-energy', { ticksFromNow: 3 });
     }
 }
 

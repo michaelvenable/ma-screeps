@@ -1,8 +1,7 @@
 let worklist = require('models').worklist;
 
-function run(component, command, ticksFromNow) {
-    ticksFromNow = ticksFromNow || 1;
-    worklist.add(component, command, ticksFromNow);
+function run(component, command, options) {
+    worklist.add(component, command, options);
 }
 
 module.exports = run;

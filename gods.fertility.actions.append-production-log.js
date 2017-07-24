@@ -13,7 +13,7 @@ function run() {
         productionLog.add(Game.time, name, controller.progress);
 
         // Re-run in approximately 12 hours.
-        worklist.add('fertility', 'append-production-log', 14400);
+        worklist.add('fertility', 'append-production-log', { ticksFromNow: 14400 });
     }
 }
 

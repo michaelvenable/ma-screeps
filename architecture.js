@@ -48,18 +48,18 @@ function run(action) {
 
             case 'plan-roads-from-spawn-to-energy':
                 taskFn = strategies.buildRoadsFromSpawnToEnergy.run;
-                worklist.add('architecture', 'plan-roads-from-energy-to-controller', 3);
+                worklist.add('architecture', 'plan-roads-from-energy-to-controller', { ticksFromNow: 3 });
                 break;
 
             case 'plan-roads-from-energy-to-controller':
                 taskFn = strategies.buildRoadsFromEnergyToController.run;
-                worklist.add('architecture', 'place-walls', 3);
+                worklist.add('architecture', 'place-walls', { ticksFromNow: 3 });
                 break;
 
             case 'place-walls':
                 console.log("XXXXXXXXXXXXXXXXXXXXX Placing walls.");
                 taskFn = strategies.placeWalls.run;
-                worklist.add('architecture', 'build', 3);
+                worklist.add('architecture', 'build', { ticksFromNow: 3 });
                 break;
 
             case 'build':
@@ -68,7 +68,7 @@ function run(action) {
 
             case 'rebuild-from-structure-map':
                 taskFn = strategies.rebuildFromStructureMap.run;
-                worklist.add('architecture', 'place-walls', 3);
+                worklist.add('architecture', 'place-walls', { ticksFromNow: 3 });
                 let oneDayInTicks = 28800;
                 worklist.add('architecture', 'rebuild-from-structure-map', oneDayInTicks);
                 break;
@@ -119,7 +119,7 @@ function build(room) {
 
     Memory.architect.buildLists[room.name] = nextBuildList;
 
-    worklist.add('architecture', 'build', 250);
+    worklist.add('architecture', 'build', { ticksFromNow: 250 });
 }
 
 function buildTaskCompare(a, b) {
