@@ -26,6 +26,32 @@ function run() {
         return;
     }
 
+    if (Memory.spawns.buildPlans.length === 0) {
+        // Set the current plan to the best performing plan and plan the next mutants.
+        let history = Memory.spawns.history.sort(function (a, b) {
+            if (a.production > b.production) {
+                return -1;
+            } else if (a.production < b.production) {
+                return 1;
+            }
+
+            return 0;
+        });
+
+        let best = history[0];
+
+        console.log(`Best plan is ${JSON.stringify(best)}.`);
+
+        Memory.spawns.currentPlan = best.build;
+
+        worklist.add('spawns', 'plan');
+
+        // Clear performance history.
+        Memory.spawns.history = [];
+
+        return;
+    }
+
     // Calculate production rate of current build.
     let amountHarvested = log.get('harvested');
     let runTime = Game.time - Memory.spawns.timeOfLastBuildChange;
@@ -45,11 +71,6 @@ function run() {
     log.reset('harvested');
 
     console.log(`spawns.next-plan: Current plan is: ${JSON.stringify(Memory.spawns.currentPlan)}.`);
-
-    if (Memory.spawns.buildPlans === undefined) {
-        worklist.add('spawns', 'plan');
-        return;
-    }
 }
 
 module.exports = run;
