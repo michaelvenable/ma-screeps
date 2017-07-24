@@ -1,3 +1,3 @@
 module.exports = {
-    show: require('performance.show.command')
+    show: require('performance.commands.show')
 };

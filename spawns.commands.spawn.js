@@ -1,6 +1,8 @@
 let roles = require('constants').roles;
 
 function run() {
+    console.log("Command started: spawns.spawn.");
+
     let spawns = [];
 
     for (let name in Game.spawns) {
@@ -20,7 +22,7 @@ function run() {
             return;
         }
 
-        if (spawn.room.energyCapacityAvailable >= getCost(plan.parts)) {
+        if (spawn.room.energyAvailable >= getCost(plan.parts)) {
             let memory = {
                 role: roles.peasant,
             };

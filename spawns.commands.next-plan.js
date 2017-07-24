@@ -5,12 +5,14 @@ Memory.spawns = Memory.spawns || {};
 
 if (Memory.spawns.currentPlan === undefined) {
     Memory.spawns.currentPlan = {
-        count: 20,
+        count: 1,
         parts: [WORK, CARRY, MOVE]
     };
 }
 
 function run() {
+    console.log("Command started: spaces.next-plan");
+
     if (Memory.spawns.timeOfLastBuildChange === undefined) {
         Memory.spawns.timeOfLastBuildChange = Game.time;
         log.reset('harvested');
@@ -33,7 +35,7 @@ function run() {
 
     let history = Memory.spawns.history || [];
     history.push({
-        build: Memory.spawns.currentBuild,
+        build: Memory.spawns.currentPlan,
         production: productionRate
     });
     Memory.spawns.history = history;

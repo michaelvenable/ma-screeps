@@ -5,10 +5,12 @@ Memory.spawns = Memory.spawns || {};
  * currently using.
  */
 function run() {
+    console.log("Command started: spawns.plan.");
+
     let currentPlan = Memory.spawns.currentPlan;
     if (currentPlan === undefined) {
         currentPlan = {
-            count: 20,
+            count: 1,
             parts: [WORK, CARRY, MOVE]
         };
     }
