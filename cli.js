@@ -4,6 +4,6 @@ module.exports = {
     showBuilds: require('cli.show-builds'),
     showJobs: require('cli.show-jobs'),
     showNumberOfCreeps: require('cli.show-number-of-creeps'),
-    scheduleTask: require('cli.schedule-task'),
+    run: require('cli.run'),
     toggleWorklist: require('cli.toggle-worklist')
 }
