@@ -16,13 +16,13 @@ function run() {
     if (Memory.spawns.timeOfLastBuildChange === undefined) {
         Memory.spawns.timeOfLastBuildChange = Game.time;
         log.reset('harvested');
-        console.log("spawns.next-plan: Quitting early. timeOfLastBuildChange is undefined.");
+        console.log("  \u2514 Quitting early. timeOfLastBuildChange is undefined.");
         return;
     }
 
     if (Memory.spawns.buildPlans === undefined) {
-        worklist.add('spawns', 'plan');
-        console.log("spawns.next-plan: Quitting early. No build plans.");
+        worklist.add('spawns', 'spawns.plan');
+        console.log("  \u2514 Quitting early. No build plans.");
         return;
     }
 
@@ -40,11 +40,12 @@ function run() {
 
         let best = history[0];
 
-        console.log(`Best plan is ${JSON.stringify(best)}.`);
+        let message = `Best plan is ${JSON.stringify(best)}.`;
+        Game.notify(message);
 
         Memory.spawns.currentPlan = best.build;
 
-        worklist.add('spawns', 'plan');
+        worklist.add('spawns', 'spawns.plan');
 
         // Clear performance history.
         Memory.spawns.history = [];
@@ -57,7 +58,8 @@ function run() {
     let runTime = Game.time - Memory.spawns.timeOfLastBuildChange;
     let productionRate = amountHarvested / runTime;
 
-    console.log("Production rate is ", productionRate);
+    let message = `${JSON.stringify(Memory.spawns.currentPlan)} performed at ${productionRate}.`;
+    Game.notify(message);
 
     let history = Memory.spawns.history || [];
     history.push({
