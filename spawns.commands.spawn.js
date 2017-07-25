@@ -28,7 +28,7 @@ function run() {
             };
 
             let result = spawn.createCreep(plan.parts, undefined, memory);
-            console.log(`Architect: Spawning a peasant: ${JSON.stringify(plan.parts)}: ${result}`);
+            console.log(`  \u2514 Spawning a peasant: ${JSON.stringify(plan.parts)}: ${result}`);
         }
     });
 }
