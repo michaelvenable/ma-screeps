@@ -18,53 +18,34 @@ function run(action) {
 
         switch (action) {
             case 'create-maps':
-                Memory.architect.maps[name] = mapping.structureMap.createFromRoom(room);
-                worklist.add('architecture', 'plan-links-near-energy-sources');
-                break;
+                // Use construction.commands.create-maps
 
             case 'plan-links-near-energy-sources':
-                taskFn = strategies.buildLinksNearEnergySources.run;
-                worklist.add('architecture', 'plan-links-near-spawns');
-                break;
+                // Use construction.commands.plan-links-near-energy-sources
 
             case 'plan-links-near-spawns':
-                taskFn = strategies.buildLinksNearSpawns.run;
-                worklist.add('architecture', 'plan-towers-near-spawns');
-                break;
+                // Use construction.commands.plan-links-near-spawns
 
             case 'plan-towers-near-spawns':
-                taskFn = strategies.buildTowersNearSpawns.run;
-                worklist.add('architecture', 'plan-towers-near-controllers');
-                break;
+                // Use construction.commands.plan-towers-near-spawns
 
             case 'plan-towers-near-controllers':
-                taskFn = strategies.buildTowersNearControllers.run;
-                worklist.add('architecture', 'plan-extensions');
-                break;
+                // Use construction.commands.plan-towers-near-controllers
 
             case 'plan-extensions':
-                taskFn = strategies.buildExtensions.run;
-                break;
+                // Use construction.commands.plan-extensions
 
             case 'plan-roads-from-spawn-to-energy':
-                taskFn = strategies.buildRoadsFromSpawnToEnergy.run;
-                worklist.add('architecture', 'plan-roads-from-energy-to-controller', { ticksFromNow: 3 });
-                break;
+                // Use construction.commands.plan-roads-from-spawn-to-energy
 
             case 'plan-roads-from-energy-to-controller':
-                taskFn = strategies.buildRoadsFromEnergyToController.run;
-                worklist.add('architecture', 'place-walls', { ticksFromNow: 3 });
-                break;
+                // Use construction.commands.plan-roads-from-energy-to-controller
 
             case 'place-walls':
-                console.log("XXXXXXXXXXXXXXXXXXXXX Placing walls.");
-                taskFn = strategies.placeWalls.run;
-                worklist.add('architecture', 'build', { ticksFromNow: 3 });
-                break;
+                // Use construction.commands.plan-walls
 
             case 'build':
-                build(room);
-                break;
+                // Use construction.commands.build
 
             case 'rebuild-from-structure-map':
                 taskFn = strategies.rebuildFromStructureMap.run;
@@ -89,78 +70,6 @@ function run(action) {
             Memory.architect.maps[name] = map;
             Memory.architect.buildLists[name] = buildList;
         }
-    }
-}
-
-function build(room) {
-    let numConstructionSites = room.find(FIND_CONSTRUCTION_SITES).length;
-
-    let buildList = Memory.architect.buildLists[room.name];
-    console.log("Architect: Placing construction sites. Build list has items: ", buildList.length);
-
-    buildList.sort(buildTaskCompare);
-
-    let nextBuildList = [];
-
-    while (buildList.length > 0) {
-        let action = buildList.shift();
-
-        if (numConstructionSites <5) {
-            let result = room.createConstructionSite(action.pos.x, action.pos.y, action.type);
-            if (result === OK) {
-                numConstructionSites += 1;
-            } else {
-                nextBuildList.push(action);
-            }
-        } else {
-            nextBuildList.push(action);
-        }
-    }
-
-    Memory.architect.buildLists[room.name] = nextBuildList;
-
-    worklist.add('architecture', 'build', { ticksFromNow: 250 });
-}
-
-function buildTaskCompare(a, b) {
-    if (a.type === b.type) {
-        return 0;
-    }
-
-    // Roads have priority.
-    if (a.type === STRUCTURE_ROAD) {
-        return -1;
-    }
-
-    if (b.type === STRUCTURE_ROAD) {
-        return 1;
-    }
-
-    // Towers have 2nd priority.
-    if (a.type === STRUCTURE_TOWER) {
-        return -1;
-    }
-
-    if (b.type === STRUCTURE_TOWER) {
-        return 1;
-    }
-
-    // Extensions have 3rd priority.
-    if (a.type === STRUCTURE_EXTENSION) {
-        return -1;
-    }
-
-    if (b.type === STRUCTURE_EXTENSION) {
-        return 1;
-    }
-
-    // Links have 4th priority.
-    if (a.type === STRUCTURE_LINK) {
-        return -1;
-    }
-
-    if (b.type === STRUCTURE_LINK) {
-        return 1;
     }
 }
 
