@@ -18,6 +18,7 @@ function bulldozeRoom(roomName) {
         .filter(structure => structure.structureType === STRUCTURE_ROAD)
         .forEach(structure => structure.destroy());
 
+    Memory.architect = Memory.architect || {};
     Memory.architect.maps = {};
     Memory.architect.buildLists = {};
 
