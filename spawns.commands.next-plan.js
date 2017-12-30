@@ -37,8 +37,8 @@ function run() {
         // Clear performance history.
         Memory.spawns.history = [];
 
-        Memory.spawns.timeToStartWorkerProductivityMeasurements = Game.time + 30;
-        Memory.spawns.timeToStopWorkerProductivityMeasurements = Game.time + 60;
+        Memory.spawns.timeToStartWorkerProductivityMeasurements = Game.time + 300;
+        Memory.spawns.timeToStopWorkerProductivityMeasurements = Game.time + 600;
 
         return;
     }
@@ -60,8 +60,8 @@ function run() {
 
     Memory.spawns.currentPlan = Memory.spawns.buildPlans.shift();
 
-    Memory.spawns.timeToStartWorkerProductivityMeasurements = Game.time + 30;
-    Memory.spawns.timeToStopWorkerProductivityMeasurements = Game.time + 60;
+    Memory.spawns.timeToStartWorkerProductivityMeasurements = Game.time + 300;
+    Memory.spawns.timeToStopWorkerProductivityMeasurements = Game.time + 600;
 
     log.reset('harvested');
 
