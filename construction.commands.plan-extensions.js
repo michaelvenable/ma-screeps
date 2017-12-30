@@ -31,7 +31,7 @@ function run() {
         Memory.architect.buildLists[name] = buildList;
     }
 
-    worklist.add('construction', 'plan-roads-from-spawn-to-energy', { ticksFromNow: 3 });
+    // No need to schedule the next planning task on the worklist. strategies.buildExtensions will do it.
 }
 
 module.exports = run;

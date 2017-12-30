@@ -35,7 +35,7 @@ function build(room) {
     while (buildList.length > 0) {
         let action = buildList.shift();
 
-        if (numConstructionSites <5) {
+        if (numConstructionSites < 5) {
             let result = room.createConstructionSite(action.pos.x, action.pos.y, action.type);
             if (result === OK) {
                 numConstructionSites += 1;

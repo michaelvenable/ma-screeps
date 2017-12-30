@@ -31,7 +31,10 @@ function run(creep) {
             } else if (result !== OK) {
                 console.log(`${creep} could not harvest energy: ${result}.`);
             } else {
-                performance.log.append('harvested', 1);
+                if (Game.time >= Memory.spawns.timeToStartWorkerProductivityMeasurements &&
+                    Game.time < Memory.spawns.timeToStopWorkerProductivityMeasuremnets) {
+                    performance.log.append('harvested', 1);
+                }
             }
         }
     } else {
