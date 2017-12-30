@@ -1,0 +1,35 @@
+Memory.spawns.currentPlan
+-------------------------
+Current build plan. Each time we spawn a worker unit, this build plan will be used to construct the new unit
+'s body. A typical plan looks like this:
+
+{
+    count: 1,
+    parts: [WORK, CARRY, MOVE]
+}
+
+count is the number of units that should be exist concurrently.
+parts lists the parts in the unit.
+
+Memory.spawns.timeOflastBuildChange
+-----------------------------------
+We periodically try different builds of the worker units in order to find the most productive build. This
+variable is used to keep track of the time we last switched to a new build. This is used so that we can
+switch builds on a regular schedule and measure the performance of the build.
+
+Memory.spawns.timeToStartWorkerProductivityMeasurements
+-------------------------------------------------------
+The time at which we should start measuring the productivity of the workers. When trying a new build for
+workers, we wait a while before we start taking measurements. This is to give time for the old workers that
+are using the old build to die off and be replaced with workers of the new build.
+
+Memory.spawns.timeToStopWorkerProductivityMeasurements
+-------------------------------------------------------
+The time at which we should stop measuring the productivity of the workers. When measuring productivity, we
+want to allow each build plan an equal amount of time to run, so that the measurements can be compared across
+build plans.
+
+Memory.spawns.timeToTryAnotherWorkerBuild
+-----------------------------------------
+The time at which we switch to another build plan. After switching, we allow time for the old workers using
+the old build to die before we start measuring the productivity of the new build.
