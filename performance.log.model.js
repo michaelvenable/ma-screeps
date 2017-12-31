@@ -2,16 +2,14 @@ Memory.performance = Memory.performance || {};
 Memory.performance.log = Memory.performance.log || {};
 
 function append(metric, amount) {
-    if (Memory.performance.isMeasuringOn) {
-        ensureValidMetric(metric);
+    ensureValidMetric(metric);
 
-        if (Memory.performance.log[metric] === undefined) {
-            Memory.performance.log[metric] = 0;
-            reset(metric);
-        };
+    if (Memory.performance.log[metric] === undefined) {
+        Memory.performance.log[metric] = 0;
+        reset(metric);
+    };
 
-        Memory.performance.log[metric] += amount;
-    }
+    Memory.performance.log[metric] += amount;
 }
 
 function get(metric) {
