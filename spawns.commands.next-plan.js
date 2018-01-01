@@ -61,7 +61,7 @@ function run() {
     Memory.spawns.currentPlan = Memory.spawns.buildPlans.shift();
 
     Memory.spawns.timeToStartWorkerProductivityMeasurements = Game.time + 1600;
-    Memory.spawns.timeToStopWorkerProductivityMeasurements = Game.time + 1600;
+    Memory.spawns.timeToStopWorkerProductivityMeasurements = Game.time + 2600;
 
     log.reset('harvested');
 
